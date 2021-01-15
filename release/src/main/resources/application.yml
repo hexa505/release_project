@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver  #h2 드라이버 설정
+    url: jdbc:h2:~/jpashop
+    username: sa  # 사용자 이름 (로그인 시 사용)
+    password:
