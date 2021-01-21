@@ -1,0 +1,20 @@
+package com.project.release.domain.album;
+
+
+import javax.persistence.*;
+
+import static javax.persistence.FetchType.LAZY;
+
+@Entity
+public class AlbumFavorite {
+
+    @Id
+    @GeneratedValue
+    @Column(name = "album_favorite_id")
+    private Integer albumFavoriteId;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "album_id")
+    private Album album;
+
+}

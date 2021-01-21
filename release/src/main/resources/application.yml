@@ -15,4 +15,7 @@ spring:
     logging.level:
       org.hibernate.SQL: debug
       org.hibernate.type: trace
-
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
