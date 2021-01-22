@@ -31,6 +31,12 @@ public class Photo {
     @OneToMany(mappedBy = "photo")
     private List<PhotoFavorite> photoFavoriteList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "photo")
+    private List<PhotoTag> photoTags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "photo")
+    private List<Comment> comments = new ArrayList<>();
+
     public void setAlbum(Album album) {
         this.album = album;
         album.getPhotoList().add(this);

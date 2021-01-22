@@ -1,9 +1,8 @@
 package com.project.release.domain.album;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Tag {
@@ -13,4 +12,8 @@ public class Tag {
     private Integer tagId;
 
     private String tag;
+
+    @OneToMany(mappedBy = "tag")
+    private List<PhotoTag> photoTags = new ArrayList<>();
+
 }
