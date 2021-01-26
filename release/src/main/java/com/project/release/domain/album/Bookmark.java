@@ -13,7 +13,7 @@ public class Bookmark {
     @Id
     @GeneratedValue
     @Column(name = "bookmark_id")
-    private Integer bookmarkId;
+    private Long bookmarkId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "album_id")

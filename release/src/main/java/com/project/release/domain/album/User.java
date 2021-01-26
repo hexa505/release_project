@@ -12,7 +12,7 @@ public class User {
     @Id
     @GeneratedValue
     @Column(name = "user_id")
-    private Integer userId;
+    private Long userId;
 
     @OneToMany(mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();

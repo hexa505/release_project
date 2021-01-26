@@ -9,7 +9,7 @@ public class PhotoFavorite {
     @Id
     @GeneratedValue
     @Column(name = "photo_favorite_id")
-    private Integer photoFavoriteId;
+    private Long photoFavoriteId;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "photo_id")

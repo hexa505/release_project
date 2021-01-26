@@ -13,10 +13,10 @@ public class Comment {
     @Id
     @GeneratedValue
     @Column(name = "comment_id")
-    private Integer commentId;
+    private Long commentId;
 
     //예약어 조심 ~
-    private Integer orders;
+    private Long orders;
 
     private String content;
 

@@ -12,7 +12,7 @@ public class PhotoTag {
     @Id
     @GeneratedValue
     @Column(name = "photo_tag_id")
-    private Integer id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="photo_id")

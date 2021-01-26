@@ -11,7 +11,7 @@ public class AlbumFavorite {
     @Id
     @GeneratedValue
     @Column(name = "album_favorite_id")
-    private Integer albumFavoriteId;
+    private Long albumFavoriteId;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "album_id")

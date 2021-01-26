@@ -12,13 +12,13 @@ public class Photo {
     @Id
     @GeneratedValue
     @Column(name = "photo_id")
-    private Integer photoId;
+    private Long photoId;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "album_id")
     private Album album;
 
-    private Integer num;
+    private Long num;
 
     private String pic;
 
