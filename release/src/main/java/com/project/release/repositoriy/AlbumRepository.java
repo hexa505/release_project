@@ -1,6 +1,5 @@
 package com.project.release.repositoriy;
 
-
 import com.project.release.domain.album.Album;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

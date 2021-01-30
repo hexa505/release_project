@@ -1,8 +1,6 @@
 package com.project.release.domain.album;
 
-import com.project.release.domain.BaseTimeEntity;
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
