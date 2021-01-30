@@ -18,13 +18,14 @@ public class Album {
     @Column(name = "user_id")
     private Long userId;
 
+    @Column
     private String thumbnail;
 
     private String description;
 
     private String title;
 
-    private String userName;
+//    private String userName;
 
     @Column(name = "create_date")
     private LocalDateTime createDate;
