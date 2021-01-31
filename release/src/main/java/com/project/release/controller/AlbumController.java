@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -19,9 +21,22 @@ public class AlbumController {
 //        return "index";
 //    }
 
+//    @PostMapping("/submit")
+//    public void test(@ModelAttribute MultiForm multiForm) {
+//        System.out.println(multiForm.getProfileImage().getName());
+//        System.out.println(multiForm.getPhotoForm().getTitle());
+//    }
+
     @PostMapping("/submit")
-    public void test(@ModelAttribute MultiForm multiForm) {
-        System.out.println(multiForm.getProfileImage().getName());
-        System.out.println(multiForm.getPhotoForm().getTitle());
-    }
+    public void test(@ModelAttribute MultiFormList request) {
+      request.getMultiFormList().stream().forEach(photoRequest ->{
+
+          System.out.println(photoRequest.getProfileImage().getOriginalFilename());
+          System.out.println(photoRequest.getPhotoForm().getTitle());
+          System.out.println(photoRequest.getPhotoForm().getDescription());
+          System.out.println(photoRequest.getPhotoForm().getNum());
+
+      });
+
+        }
 }
