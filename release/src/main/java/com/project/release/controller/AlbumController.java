@@ -1,50 +1,27 @@
 package com.project.release.controller;
 
 
-import com.project.release.dto.FileDto;
-import com.project.release.service.FileService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.IOException;
-
-@Controller
+@Slf4j
+@RestController
 @RequiredArgsConstructor
 public class AlbumController {
 
-    private FileService fileService;
+    //, @RequestParam("file") MultipartFile[] productImageFiles
+    // @RequestParam("file") MultipartFile file,
+//    @PostMapping("/submit")
+//    public String upload(@RequestParam("form") AlbumPhotoForm form) throws Exception{
+//        System.out.println("리스트 테스트");
+//        System.out.println(form);
+//        return "index";
+//    }
 
-    @PostMapping("/upload")
-    public String upload(@RequestParam("file") MultipartFile files) {
-        try {
-
-            String origFilename = files.getOriginalFilename();
-            String filename = origFilename + "encoded";
-            String savePath = System.getProperty("user.dir") + "\\files";
-
-            if(!new File(savePath).exists()){
-                try {
-                    new File(savePath).mkdir();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-            }
-
-            String filePath = savePath + "\\" + filename;
-            files.transferTo(new File(filePath));
-            FileDto fileDto = new FileDto();
-            fileDto.setOrigFilename(origFilename);
-            fileDto.setFilename(filename);
-            fileDto.setFilePath(filePath);
-            Long fileId = fileService.saveFile(fileDto);
-
-        }  catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "redirect:/";
+    @PostMapping("/submit")
+    public void test(@ModelAttribute MultiForm multiForm) {
+        System.out.println(multiForm.getProfileImage().getName());
+        System.out.println(multiForm.getPhotoForm().getTitle());
     }
 }

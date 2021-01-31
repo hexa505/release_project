@@ -36,5 +36,4 @@ public class Album {
     @OneToMany(mappedBy = "album")
     private List<Photo> photoList = new ArrayList<>();
 
-
 }

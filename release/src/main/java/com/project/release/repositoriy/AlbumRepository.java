@@ -17,7 +17,6 @@ public class AlbumRepository {
     //id 로 찾기 , 앨범 이름으로 찾기, username으로 찾기, 사진으로 찾는건,,, photo repo에서 또 해줘야할듯,,,?
     // 전체 리스트 조회
 
-
     public void save(Album album) {
         em.persist(album);
     }

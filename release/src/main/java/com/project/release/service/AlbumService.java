@@ -25,7 +25,6 @@ public class AlbumService {
         albumRepository.save(album);
         return album.getAlbumId();
     }
-
     //유저name으로 앨범 리스트 조회
     public List<Album> findAlbumsByUserName(String userName){
         return albumRepository.findByUserName(userName);
@@ -35,5 +34,6 @@ public class AlbumService {
     public List<Album> findAlbumsByAlbumTitle(String title) {
         return albumRepository.findByAlbumTitle(title);
     }
+
 
 }
