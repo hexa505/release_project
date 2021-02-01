@@ -19,3 +19,9 @@ spring:
     console:
       enabled: true
       path: /h2-console
+custom:
+  path:
+    upload-images: '/varFolder'
+resources:
+  location: "/varFolder"
+  uri_path: "/submit"
