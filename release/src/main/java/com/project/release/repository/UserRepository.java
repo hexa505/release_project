@@ -1,6 +1,6 @@
 package com.project.release.repository;
 
-import com.project.release.domain.User;
+import com.project.release.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -12,9 +12,9 @@ public class UserRepository {
 
     private final EntityManager em;
 
-    public User save(User user) {
+    public Long save(User user) {
         em.persist(user);
-        return user;
+        return user.getId();
     }
 
     public User findOne(Long id) {

@@ -1,14 +1,16 @@
 package com.project.release.controller;
 
-import com.project.release.domain.SessionUser;
-import com.project.release.domain.User;
-import com.project.release.domain.UserDTO;
+import com.project.release.domain.user.*;
+import com.project.release.service.ImageService;
 import com.project.release.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
 
 @RestController
@@ -18,52 +20,89 @@ public class MemberController {
 
     private final HttpSession httpSession;
     private final UserService userService;
-    private Long testCode = 65801603L;
+    private final ImageService imageService;
+    private final Long testCode = 65801603L;
 
-
-    //vue 단에서 무슨 정보 가지고 있을지 고민 필요함...
+    /*
+    로그인
+     */
     @GetMapping("/members")
-    public SessionUser checkRegistered(Principal principal) {
-
+    public String checkRegistered(HttpServletResponse response, Principal principal) {
         //User user = userService.findByCode(Long.parseLong(principal.getName()));
         User user = userService.findByCode(testCode);
 
-        if(user != null) {
-            httpSession.setAttribute("user", new SessionUser(user));
+        if(user == null) {
+            return null;
         }
 
-        return (SessionUser)httpSession.getAttribute("user");
+        httpSession.setAttribute("user", new SessionUser(user));
+
+        return user.getName();
     }
 
+    /*
+    회원가입
+     */
     @PostMapping("/members")
-    public SessionUser register(@RequestBody UserDTO dto, Principal principal) {
-        log.info("post mapping!!!!");
-        System.out.println(dto);
+    public String register(@ModelAttribute @Valid UserRequestDTO dto, Principal principal) throws IOException {
 
         User user = User.builder()
                 //.code(Long.parseLong(principal.getName()))
                 .code(testCode)
                 .name(dto.getName())
-                .pic(dto.getPic())
                 .introduction(dto.getIntroduction())
                 .build();
 
-        userService.join(user);
+        Long id = userService.join(user);
 
-        httpSession.setAttribute("user", new SessionUser(user));
+        String pic = imageService.createProfileImg(id, dto.getProfileImg());
+        String picSmall = imageService.createProfileThumbnail(id, dto.getProfileImg());
+        log.info("pic name: {}", pic);
+        userService.updateUserPic(id, pic, picSmall);
 
-        return (SessionUser)httpSession.getAttribute("user");
+        return "user created";
 
     }
 
-    @PutMapping("/members/{userId}")
-    public User updateUser(@RequestBody UserDTO dto, @PathVariable("userId") String userId) {
+    /*
+    회원 조회
+     */
+    @GetMapping("/members/{username}")
+    public UserResponseDTO showUser(@PathVariable("username") String username) {
+        User user = userService.findByName(username);
+        UserResponseDTO response = new UserResponseDTO(user);
+        return response;
+    }
+
+    /*
+    회원정보 수정
+     */
+    /*
+    @PostMapping("/members/{username}")
+    public void updateUser(@RequestBody @Valid UserRequestDTO dto, @PathVariable("username") String username) {
         SessionUser requestUser = (SessionUser)httpSession.getAttribute("user");
-        if(requestUser.getName().equals(userId)) {
-            userService.updateUser(requestUser.getId(), dto);
+        if(requestUser.getName().equals(username)) {
+            User user = userService.updateUser(requestUser.getId(), dto);
+            httpSession.setAttribute("user", new SessionUser(user));
         }
-        return userService.findByCode(requestUser.getCode());
+
+        return;
     }
+     */
+
+    /* 연관관계 끊는법?
+    @DeleteMapping("/members/{username}")
+    public String deleteUser(@PathVariable("username") String username) {
+        SessionUser requestUser = (SessionUser)httpSession.getAttribute("user");
+        if(requestUser.getName().equals(username)) {
+
+        }
+
+        return "user deleted";
+    }
+
+     */
+
 
 
 }

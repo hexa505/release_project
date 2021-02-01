@@ -1,7 +1,6 @@
 package com.project.release.service;
 
-import com.project.release.domain.User;
-import com.project.release.domain.UserDTO;
+import com.project.release.domain.user.User;
 import com.project.release.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,24 +13,55 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    // 회원가입
     @Transactional
     public Long join(User user) {
-        userRepository.save(user);
-        //name 중복체크 필요함
-        return user.getId();
+        validateDuplicateUserByCode(user.getCode());
+        validateDuplicateUserByName(user.getName());
+        return userRepository.save(user);
     }
 
-    //update
     @Transactional
-    public void updateUser(Long id, UserDTO dto) {
-        //User user = userRepository.findById(id);
+    public void updateUserPic(Long id, String pic, String picSmall) {
         User user = userRepository.findOne(id);
-        user.updateInfo(dto.getName(), dto.getPic(), dto.getIntroduction());
-        //name 중복체크 필요함
+        user.updatePic(pic, picSmall);
     }
+
+    // 회원 정보 수정
+    /*
+    @Transactional
+    public User updateUser(Long id, UserRequestDTO dto) {
+        validateDuplicateUserByName(dto.getUserInfo().getName());
+        User user = userRepository.findOne(id);
+        user.updateInfo(dto.getUserInfo().getName(), dto.getProfileImg(), dto.getUserInfo().getIntroduction());
+        return user;
+    }
+
+     */
+
+    private void validateDuplicateUserByCode(Long code) {
+        User findUser = userRepository.findByCode(code);
+        if(findUser != null) {
+            throw new IllegalStateException("이미 가입한 회원입니다.");
+        }
+    }
+
+    private void validateDuplicateUserByName(String name) {
+        User findUser = userRepository.findByName(name);
+        if(findUser != null) {
+            throw new IllegalStateException("이미 존재하는 username 입니다.");
+        }
+    }
+
+    //회원 탈퇴
+
 
     public User findByCode(Long code) {
         return userRepository.findByCode(code);
+    }
+
+    public User findByName(String name) {
+        return userRepository.findByName(name);
     }
 
 
