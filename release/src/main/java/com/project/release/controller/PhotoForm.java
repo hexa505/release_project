@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 public class PhotoForm {
     private String title;
-    private Integer num;
+    private Long num;
     private String description;
-
 }

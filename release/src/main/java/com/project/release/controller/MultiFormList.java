@@ -9,4 +9,6 @@ import java.util.List;
 @Getter
 public class MultiFormList {
     private List<MultiForm> multiFormList;
+    private Long userId;
+    private String userName;
 }

@@ -1,15 +1,18 @@
 package com.project.release.domain.album;
 
+import com.project.release.domain.BaseTimeEntity;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Entity
-public class Album {
+@NoArgsConstructor
+public class Album extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "album_id")
@@ -25,15 +28,24 @@ public class Album {
 
     private String title;
 
-//    private String userName;
+    private String userName;
 
-    @Column(name = "create_date")
-    private LocalDateTime createDate;
-
-    @Column(name ="modify_date")
-    private LocalDateTime modifyDate;
+//    @Column(name = "create_date")
+//    private LocalDateTime createDate;
+//
+//    @Column(name ="modify_date")
+//    private LocalDateTime modifyDate;
 
     @OneToMany(mappedBy = "album")
     private List<Photo> photoList = new ArrayList<>();
 
+    @Builder
+
+    public Album(Long userId, String thumbnail, String description, String title, String userName) {
+        this.userId = userId;
+        this.thumbnail = thumbnail;
+        this.description = description;
+        this.title = title;
+        this.userName = userName;
+    }
 }

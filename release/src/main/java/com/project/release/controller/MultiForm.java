@@ -10,6 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Setter
 @ToString
 public class MultiForm {
- private MultipartFile profileImage;
+ private MultipartFile photo;
  private PhotoForm photoForm;
 }
