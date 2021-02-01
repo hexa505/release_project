@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @RestController
@@ -25,7 +26,7 @@ public class AlbumController {
 
     private final AlbumService albumService;
     private final PhotoService photoService;
-    Long albumId = null;
+//    Long albumId = null;
 //    @PostMapping("/submit")
 //    public void submit(@ModelAttribute MultiFormList request) {
 //
@@ -72,20 +73,28 @@ public class AlbumController {
 //    }
 
 
+    //url로 유저 아이디 받던감,,,,,기억이 안나네
     @PostMapping("/submit")
-    public void test(@ModelAttribute MultiFormtest request) {
-
+    public void test(@ModelAttribute MultiForm request) throws IOException {
+        //1. 앨범 폼 받기
         System.out.println(request.toString());
-        System.out.println(request.getAlbumFormtest().getTitle());
+        System.out.println(request.getAlbumForm().getTitle());
+       Long albumId = albumService.createAlbum(request,  (long) 1);
 
-        request.getPhotoFormtestList().forEach(photoRequest -> {
-            //
+
+       saveFiole(request.getAlbumForm().getPhoto(), resourcesLocation + "/1/album");
+       AtomicInteger index = new AtomicInteger();
+        request.getPhotoFormList().forEach(photoRequest -> {
+            //2. 포토 리스트 받기..
+            photoService.savePhoto(photoRequest, albumId, index.get());
+            try {
+                saveFiole(photoRequest.getPhoto(), resourcesLocation + "/1/album");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            index.getAndIncrement(); // .....?? 일케하래요....??
+
             System.out.println(photoRequest.getPhoto().getOriginalFilename());
-            //파일 저장소에다가 저장하는고
-
-            // 앨범이랑 , 포토들 저장해주는 메소드를 어디다 만들어야대남 앨범 서비스..
-            // MultiForm을 받아서 이미지 이름, 앨범표지, 사진들 저장하는 메소드
-            //포토폼의 제일 첫번 째면,,,,,앨범 표지로 설정
             System.out.println(photoRequest.getTitle());
 
         });

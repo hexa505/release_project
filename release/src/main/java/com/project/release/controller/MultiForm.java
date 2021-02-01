@@ -2,14 +2,11 @@ package com.project.release.controller;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import org.springframework.web.multipart.MultipartFile;
 
-
-@Getter
+import java.util.List;
 @Setter
-@ToString
+@Getter
 public class MultiForm {
- private MultipartFile photo;
- private PhotoForm photoForm;
+    private List<PhotoForm> photoFormList;
+    private AlbumForm albumForm;
 }

@@ -7,16 +7,16 @@ import javax.persistence.*;
 
 @Getter
 @Entity
-public class PhotoTag {
+public class AlbumTag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "photo_tag_id")
+    @Column(name = "album_tag_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="photo_id")
-    private Photo photo;
+    @JoinColumn(name="album_id")
+    private Album album;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag_id")

@@ -16,8 +16,9 @@ public class PhotoRepository {
 
     // 저장,,,,수정,,,,,,
     //조회,,,
-    public void save(Photo photo) {
+    public Long save(Photo photo) {
         em.persist(photo);
+        return photo.getPhotoId();
     }
 
     //아이디로 조회

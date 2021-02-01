@@ -1,6 +1,7 @@
 package com.project.release.service;
 
 
+import com.project.release.controller.AlbumForm;
 import com.project.release.controller.MultiForm;
 import com.project.release.domain.album.Album;
 import com.project.release.repositoriy.AlbumRepository;
@@ -26,19 +27,34 @@ public class AlbumService {
 //    }
 
     //앨범 저장하는거,,,,
+//    @Transactional
+//    public Long createAlbum(MultiForm form, Long userId, String userName) {
+//
+//        Album album = Album.builder().userId(userId)
+//                .userName(userName)
+//                .thumbnail(form.getPhoto().getOriginalFilename())
+//                .description(form.getPhotoForm().getDescription())
+//                .title(form.getPhotoForm().getTitle()).build();
+//
+//        albumRepository.save(album);
+//
+//        // 앨범아이디 반환하고 싶은뎁쇼 일케하면 되낭~
+//        return album.getAlbumId();
+//    }
+
+
     @Transactional
-    public Long createAlbum(MultiForm form, Long userId, String userName) {
+    public Long createAlbum(MultiForm form, Long userId){
 
-        Album album = Album.builder().userId(userId)
-                .userName(userName)
-                .thumbnail(form.getPhoto().getOriginalFilename())
-                .description(form.getPhotoForm().getDescription())
-                .title(form.getPhotoForm().getTitle()).build();
-
+        //album tag 처리하는거 뭔가 해시 맵 같은걸로 할거같은,,
+        AlbumForm albumForm = form.getAlbumForm();
+        Album album = Album.builder().userId(userId).userName("user1")
+                .thumbnail(albumForm.getPhoto().getOriginalFilename())
+                .title(albumForm.getTitle())
+                .description(albumForm.getDescription()).build();
         albumRepository.save(album);
-
-        // 앨범아이디 반환하고 싶은뎁쇼 일케하면 되낭~
         return album.getAlbumId();
+
     }
 
 

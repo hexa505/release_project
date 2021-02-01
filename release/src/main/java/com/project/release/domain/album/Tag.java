@@ -14,6 +14,6 @@ public class Tag {
     private String tag;
 
     @OneToMany(mappedBy = "tag")
-    private List<PhotoTag> photoTags = new ArrayList<>();
+    private List<AlbumTag> albumTags = new ArrayList<>();
 
 }

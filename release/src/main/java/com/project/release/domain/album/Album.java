@@ -37,10 +37,12 @@ public class Album extends BaseTimeEntity {
 //    private LocalDateTime modifyDate;
 
     @OneToMany(mappedBy = "album")
+    private List<AlbumTag> albumTags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "album")
     private List<Photo> photoList = new ArrayList<>();
 
     @Builder
-
     public Album(Long userId, String thumbnail, String description, String title, String userName) {
         this.userId = userId;
         this.thumbnail = thumbnail;

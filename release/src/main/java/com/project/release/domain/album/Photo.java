@@ -21,7 +21,7 @@ public class Photo {
     @JoinColumn(name = "album_id")
     private Album album;
 
-    private Long num;
+    private int num;
 
     private String pic;
 
@@ -35,9 +35,6 @@ public class Photo {
     private List<PhotoFavorite> photoFavoriteList = new ArrayList<>();
 
     @OneToMany(mappedBy = "photo")
-    private List<PhotoTag> photoTags = new ArrayList<>();
-
-    @OneToMany(mappedBy = "photo")
     private List<Comment> comments = new ArrayList<>();
     //연관관계 매핑..
     public void setAlbum(Album album) {
@@ -46,7 +43,7 @@ public class Photo {
     }
 
     @Builder
-    public Photo(Album album, Long num, String pic, String title, String description) {
+    public Photo(Album album, int num, String pic, String title, String description) {
         this.album = album;
         this.num = num;
         this.pic = pic;

@@ -18,21 +18,32 @@ public class PhotoService {
     private final PhotoRepository photoRepository;
     private final AlbumRepository albumRepository;
 
-    //메소드 이름,,,,,,,,,,넘 통일안되나
-    @Transactional
-    public Long savePhoto(MultiForm multiForm, Long albumId) {
+//    //메소드 이름,,,,,,,,,,넘 통일안되나
+//    @Transactional
+//    public Long savePhoto(MultiForm multiForm, Long albumId) {
+//
+//        Album album = albumRepository.findOne(albumId);
+//        PhotoForm photoForm = multiForm.getPhotoForm();
+//        Photo photo = Photo.builder().album(album)
+//                .title(photoForm.getTitle())
+//                .description(photoForm.getDescription())
+//                .pic(multiForm.getPhoto().getOriginalFilename())
+//                .num(photoForm.getNum()).build();
+//
+//        photoRepository.save(photo);
+//
+//        return photo.getPhotoId();
+//    }
 
+    public Long savePhoto(PhotoForm photoForm, Long albumId, int index) {
         Album album = albumRepository.findOne(albumId);
-        PhotoForm photoForm = multiForm.getPhotoForm();
-        Photo photo = Photo.builder().album(album)
+        Photo photo = Photo.builder()
+                .album(album)
+                .pic(photoForm.getPhoto().getOriginalFilename())
                 .title(photoForm.getTitle())
-                .description(photoForm.getDescription())
-                .pic(multiForm.getPhoto().getOriginalFilename())
-                .num(photoForm.getNum()).build();
-
-        photoRepository.save(photo);
-
-        return photo.getPhotoId();
+                .num(index)
+                .build();
+        return photoRepository.save(photo);
     }
 
 
