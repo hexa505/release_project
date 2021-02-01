@@ -7,7 +7,7 @@ import static javax.persistence.FetchType.*;
 @Entity
 public class PhotoFavorite {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "photo_favorite_id")
     private Long photoFavoriteId;
 

@@ -9,7 +9,7 @@ import static javax.persistence.FetchType.LAZY;
 public class AlbumFavorite {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "album_favorite_id")
     private Long albumFavoriteId;
 

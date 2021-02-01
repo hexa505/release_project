@@ -26,17 +26,59 @@ public class AlbumController {
     private final AlbumService albumService;
     private final PhotoService photoService;
     Long albumId = null;
+//    @PostMapping("/submit")
+//    public void submit(@ModelAttribute MultiFormList request) {
+//
+//        String userName = request.getUserName();
+//        Long userId = request.getUserId();
+//
+//        System.out.println("userId = " + userId);
+//        System.out.println("userName = " + userName);
+//
+//        log.info(request.getUserName());
+//        request.getMultiFormList().stream().forEach(photoRequest -> {
+//            //
+//            System.out.println(photoRequest.getPhoto().getOriginalFilename());
+//            //파일 저장소에다가 저장하는고
+//
+//            // 앨범이랑 , 포토들 저장해주는 메소드를 어디다 만들어야대남 앨범 서비스..
+//            // MultiForm을 받아서 이미지 이름, 앨범표지, 사진들 저장하는 메소드
+//            //포토폼의 제일 첫번 째면,,,,,앨범 표지로 설정
+//            System.out.println("음냐리... 1 이겟죠..." +photoRequest.getPhotoForm().getNum());
+//            if (photoRequest.getPhotoForm().getNum() == 1) {
+//                //일케 써도 되는감요....
+//                try {
+//                    this.albumId = albumService.createAlbum(photoRequest, userId, userName);
+//                    saveFiole(photoRequest.getPhoto(), resourcesLocation + "/" + userId + "/album" + photoRequest.getPhotoForm().getTitle());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            } else {
+//                // albumId가 제대로 저장되지 않은경우 익셉션 처리하긔 ~
+//                try {
+//                    System.out.println("albumId = " + this.albumId);
+//                    //여기 경로 수정하쇼~
+//                    saveFiole(photoRequest.getPhoto(), resourcesLocation + "/" + userId + "/photo" + photoRequest.getPhotoForm().getTitle());
+//                    photoService.savePhoto(photoRequest, this.albumId);
+//                } catch (NullPointerException | IOException e) {
+//                    System.out.println(e + "albumId 가 null로 들어온 경우");
+//                }
+//                System.out.println(photoRequest.getPhotoForm().getTitle());
+//                System.out.println(photoRequest.getPhotoForm().getDescription());
+//                System.out.println(photoRequest.getPhotoForm().getNum());
+//            }
+//
+//        });
+//    }
+
+
     @PostMapping("/submit")
-    public void submit(@ModelAttribute MultiFormList request) {
+    public void test(@ModelAttribute MultiFormtest request) {
 
-        String userName = request.getUserName();
-        Long userId = request.getUserId();
+        System.out.println(request.toString());
+        System.out.println(request.getAlbumFormtest().getTitle());
 
-        System.out.println("userId = " + userId);
-        System.out.println("userName = " + userName);
-
-        log.info(request.getUserName());
-        request.getMultiFormList().stream().forEach(photoRequest -> {
+        request.getPhotoFormtestList().forEach(photoRequest -> {
             //
             System.out.println(photoRequest.getPhoto().getOriginalFilename());
             //파일 저장소에다가 저장하는고
@@ -44,31 +86,13 @@ public class AlbumController {
             // 앨범이랑 , 포토들 저장해주는 메소드를 어디다 만들어야대남 앨범 서비스..
             // MultiForm을 받아서 이미지 이름, 앨범표지, 사진들 저장하는 메소드
             //포토폼의 제일 첫번 째면,,,,,앨범 표지로 설정
-            System.out.println("음냐리... 0 이겟죠..." +photoRequest.getPhotoForm().getNum());
-            if (photoRequest.getPhotoForm().getNum() == 1) {
-                //일케 써도 되는감요....
-                try {
-                    this.albumId = albumService.createAlbum(photoRequest, userId, userName);
-                    saveFiole(photoRequest.getPhoto(), resourcesLocation + "/" + userId + "/album" + photoRequest.getPhotoForm().getTitle());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                // albumId가 제대로 저장되지 않은경우 익셉션 처리하긔 ~
-                try {
-                    System.out.println("albumId = " + this.albumId);
-                    saveFiole(photoRequest.getPhoto(), resourcesLocation + "/" + userId + "/photo" + photoRequest.getPhotoForm().getTitle());
-                    photoService.savePhoto(photoRequest, this.albumId);
-                } catch (NullPointerException | IOException e) {
-                    System.out.println(e + "albumId 가 null로 들어온 경우");
-                }
-                System.out.println(photoRequest.getPhotoForm().getTitle());
-                System.out.println(photoRequest.getPhotoForm().getDescription());
-                System.out.println(photoRequest.getPhotoForm().getNum());
-            }
+            System.out.println(photoRequest.getTitle());
 
         });
+
+
     }
+
 
     public void saveFiole(MultipartFile file, String directoryPath) throws IOException {
         // parent directory를 찾는다.

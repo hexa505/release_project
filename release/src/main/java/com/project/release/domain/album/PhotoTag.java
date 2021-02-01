@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class PhotoTag {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "photo_tag_id")
     private Long id;
 
