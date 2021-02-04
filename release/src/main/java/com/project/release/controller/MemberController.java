@@ -1,5 +1,7 @@
 package com.project.release.controller;
 
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.MetadataException;
 import com.project.release.domain.user.*;
 import com.project.release.service.ImageService;
 import com.project.release.service.UserService;
@@ -44,7 +46,7 @@ public class MemberController {
     회원가입
      */
     @PostMapping("/members")
-    public String register(@ModelAttribute @Valid UserRequestDTO dto, Principal principal) throws IOException {
+    public String register(@ModelAttribute @Valid UserRequestDTO dto, Principal principal) throws IOException, ImageProcessingException, MetadataException {
 
         User user = User.builder()
                 //.code(Long.parseLong(principal.getName()))
@@ -56,9 +58,8 @@ public class MemberController {
         Long id = userService.join(user);
 
         String pic = imageService.createProfileImg(id, dto.getProfileImg());
-        String picSmall = imageService.createProfileThumbnail(id, dto.getProfileImg());
         log.info("pic name: {}", pic);
-        userService.updateUserPic(id, pic, picSmall);
+        userService.updateUserPic(id, pic);
 
         return "user created";
 

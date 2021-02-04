@@ -22,9 +22,9 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUserPic(Long id, String pic, String picSmall) {
+    public void updateUserPic(Long id, String pic) {
         User user = userRepository.findOne(id);
-        user.updatePic(pic, picSmall);
+        user.updatePic(pic);
     }
 
     // 회원 정보 수정

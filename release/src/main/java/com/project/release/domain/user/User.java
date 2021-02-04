@@ -30,19 +30,14 @@ public class User {
     @Length(max = 100)
     private String pic;
 
-    @Length(max = 100)
-    @Column(name = "pic_small")
-    private String picSmall;
-
     @Length(max = 200)
     private String introduction;
 
     @Builder
-    public User(Long code, String name, String pic, String picSmall, String introduction) {
+    public User(Long code, String name, String pic, String introduction) {
         this.code = code;
         this.name = name;
         this.pic = pic;
-        this.picSmall = picSmall;
         this.introduction = introduction;
     }
 
@@ -51,8 +46,7 @@ public class User {
         this.introduction = introduction;
     }
 
-    public void updatePic(String pic, String picSmall) {
+    public void updatePic(String pic) {
         this.pic = pic;
-        this.picSmall = picSmall;
     }
 }

@@ -9,14 +9,11 @@ public class UserResponseDTO {
 
     private String pic;
 
-    private String picSmall;
-
     private String introduction;
 
     public UserResponseDTO(User user) {
         this.name = user.getName();
         this.pic = user.getPic();
-        this.picSmall = user.getPicSmall();
         this.introduction = user.getIntroduction();
     }
 
