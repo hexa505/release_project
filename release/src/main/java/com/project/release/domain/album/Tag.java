@@ -1,10 +1,16 @@
 package com.project.release.domain.album;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Entity
+@NoArgsConstructor
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,5 +21,10 @@ public class Tag {
 
     @OneToMany(mappedBy = "tag")
     private List<AlbumTag> albumTags = new ArrayList<>();
+
+    @Builder
+    public Tag(String token) {
+        this.tag = token;
+    }
 
 }

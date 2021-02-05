@@ -43,8 +43,7 @@ public class Album extends BaseTimeEntity {
     private List<Photo> photoList = new ArrayList<>();
 
     @Builder
-    public Album(Long userId, String thumbnail, String description, String title, String userName) {
-        this.userId = userId;
+    public Album( String thumbnail, String description, String title, String userName) {
         this.thumbnail = thumbnail;
         this.description = description;
         this.title = title;

@@ -44,11 +44,11 @@ public class AlbumService {
 
 
     @Transactional
-    public Long createAlbum(MultiForm form, Long userId){
+    public Long createAlbum(MultiForm form, String userName){
 
-        //album tag 처리하는거 뭔가 해시 맵 같은걸로 할거같은,,
+        //userName으로 유저 엔티티 찾아서 유저 인스턴스 넣는 걸로 바꿀 것
         AlbumForm albumForm = form.getAlbumForm();
-        Album album = Album.builder().userId(userId).userName("user1")
+        Album album = Album.builder().userName(userName)
                 .thumbnail(albumForm.getPhoto().getOriginalFilename())
                 .title(albumForm.getTitle())
                 .description(albumForm.getDescription()).build();
@@ -68,5 +68,7 @@ public class AlbumService {
         return albumRepository.findByAlbumTitle(title);
     }
 
-
+    public Album findOneById(Long id) {
+        return albumRepository.findOne(id);
+    }
 }

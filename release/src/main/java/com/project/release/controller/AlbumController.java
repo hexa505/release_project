@@ -1,8 +1,13 @@
 package com.project.release.controller;
 
 
+import com.project.release.domain.album.Album;
+import com.project.release.domain.album.Photo;
+import com.project.release.domain.album.Tag;
+import com.project.release.repositoriy.TagRepository;
 import com.project.release.service.AlbumService;
 import com.project.release.service.PhotoService;
+import com.project.release.service.TagService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +20,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
@@ -26,69 +33,24 @@ public class AlbumController {
 
     private final AlbumService albumService;
     private final PhotoService photoService;
-//    Long albumId = null;
-//    @PostMapping("/submit")
-//    public void submit(@ModelAttribute MultiFormList request) {
-//
-//        String userName = request.getUserName();
-//        Long userId = request.getUserId();
-//
-//        System.out.println("userId = " + userId);
-//        System.out.println("userName = " + userName);
-//
-//        log.info(request.getUserName());
-//        request.getMultiFormList().stream().forEach(photoRequest -> {
-//            //
-//            System.out.println(photoRequest.getPhoto().getOriginalFilename());
-//            //파일 저장소에다가 저장하는고
-//
-//            // 앨범이랑 , 포토들 저장해주는 메소드를 어디다 만들어야대남 앨범 서비스..
-//            // MultiForm을 받아서 이미지 이름, 앨범표지, 사진들 저장하는 메소드
-//            //포토폼의 제일 첫번 째면,,,,,앨범 표지로 설정
-//            System.out.println("음냐리... 1 이겟죠..." +photoRequest.getPhotoForm().getNum());
-//            if (photoRequest.getPhotoForm().getNum() == 1) {
-//                //일케 써도 되는감요....
-//                try {
-//                    this.albumId = albumService.createAlbum(photoRequest, userId, userName);
-//                    saveFiole(photoRequest.getPhoto(), resourcesLocation + "/" + userId + "/album" + photoRequest.getPhotoForm().getTitle());
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            } else {
-//                // albumId가 제대로 저장되지 않은경우 익셉션 처리하긔 ~
-//                try {
-//                    System.out.println("albumId = " + this.albumId);
-//                    //여기 경로 수정하쇼~
-//                    saveFiole(photoRequest.getPhoto(), resourcesLocation + "/" + userId + "/photo" + photoRequest.getPhotoForm().getTitle());
-//                    photoService.savePhoto(photoRequest, this.albumId);
-//                } catch (NullPointerException | IOException e) {
-//                    System.out.println(e + "albumId 가 null로 들어온 경우");
-//                }
-//                System.out.println(photoRequest.getPhotoForm().getTitle());
-//                System.out.println(photoRequest.getPhotoForm().getDescription());
-//                System.out.println(photoRequest.getPhotoForm().getNum());
-//            }
-//
-//        });
-//    }
+    private final TagService tagService;
 
-
-    //url로 유저 아이디 받던감,,,,,기억이 안나네
-    @PostMapping("/submit")
-    public void test(@ModelAttribute MultiForm request) throws IOException {
+    // 유저 네임 받아서.... 유저 아이디 찾아서 앨범정보에 넣기
+    // restcontroller에서 모델 어트리뷰트 ...괜찮은것인가?
+    @PostMapping("/{userName}/album")
+    public void publishAlbum(@ModelAttribute MultiForm request, @PathVariable String userName) throws IOException {
         //1. 앨범 폼 받기
         System.out.println(request.toString());
         System.out.println(request.getAlbumForm().getTitle());
-       Long albumId = albumService.createAlbum(request,  (long) 1);
+        Long albumId = albumService.createAlbum(request, userName);
 
-
-       saveFiole(request.getAlbumForm().getPhoto(), resourcesLocation + "/1/album");
-       AtomicInteger index = new AtomicInteger();
+        saveFile(request.getAlbumForm().getPhoto(), resourcesLocation + "/" + userName + "/album");
+        AtomicInteger index = new AtomicInteger();
         request.getPhotoFormList().forEach(photoRequest -> {
             //2. 포토 리스트 받기..
             photoService.savePhoto(photoRequest, albumId, index.get());
             try {
-                saveFiole(photoRequest.getPhoto(), resourcesLocation + "/1/album");
+                saveFile(photoRequest.getPhoto(), resourcesLocation + "/" + userName + "/album");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -98,12 +60,54 @@ public class AlbumController {
             System.out.println(photoRequest.getTitle());
 
         });
-
+//        return "/";
+        // 사용자 앨범 리스트 페이지로
+        // return "userName";
 
     }
 
 
-    public void saveFiole(MultipartFile file, String directoryPath) throws IOException {
+    //
+    @GetMapping("/{userName}/album/{albumId}")
+    public ResponseAlbum showAlbum(@PathVariable String userName, @PathVariable Long albumId) {
+
+        Album album = albumService.findOneById(albumId);
+        List<Photo> photoList = photoService.findPhotosByAlbumId(albumId);
+        System.out.println(photoList.get(0).getPic());
+        ResponseAlbum responseAlbum = new ResponseAlbum(album, photoList);
+
+        return responseAlbum;
+    }
+
+
+    @PostMapping("/test")
+    public void tagTest(){
+        stringToTags("#택1, #택2, #택3 우효 ~, 그냥 스트링, #택4 이건?");
+    }
+
+    // tags 스트링을 쪼개 주기..
+            /*    해시태그 작성 방식..
+            #태그, #태그, ...
+            #이런 식으로 띄어쓰기는 허용하지 않음
+            #해시_태그 이건 괜찮*/
+    public void stringToTags(String tags) {
+        //1. , " " 로 쪼개기
+        //2. #있는 것만 #떼고 Tag에 저장
+        StringTokenizer tk = new StringTokenizer(tags, ", ");
+
+        while (tk.hasMoreTokens()) {
+            String token = tk.nextToken();
+            System.out.println("token = " + token);
+            if (token.charAt(0) == '#') {
+                Tag tag = Tag.builder().token(token.substring(1)).build();
+                System.out.println("tag = " + tag.getTag());
+                tagService.save(tag);
+            }
+        }
+    }
+
+
+    public void saveFile(MultipartFile file, String directoryPath) throws IOException {
         // parent directory를 찾는다.
         Path directory = Paths.get(directoryPath).toAbsolutePath().normalize();
 
@@ -122,5 +126,4 @@ public class AlbumController {
         Assert.state(!Files.exists(targetPath), fileName + " File alerdy exists.");
         file.transferTo(targetPath);
     }
-
 }

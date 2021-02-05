@@ -35,7 +35,9 @@ public class PhotoRepository {
     //아님 걍 앨범 아이디로 받아온다음에 출력할 때, num순 정렬 조절하는건감,,,
     //일단 후자로함
     public List<Photo> findByAlbumId(Long id) {
-        return em.createQuery("select p from Photo p where p.album_id = :id", Photo.class).setParameter("id", id).getResultList();
+                return em.createQuery("select p from Photo p where p.album.albumId = :id", Photo.class).setParameter("id", id).getResultList();
+
+        //        return em.createQuery("select p from Photo p where p.album_id = :id", Photo.class).setParameter("id", id).getResultList();
     }
 
 }

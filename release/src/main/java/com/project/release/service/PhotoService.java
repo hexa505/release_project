@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -45,6 +47,12 @@ public class PhotoService {
                 .build();
         return photoRepository.save(photo);
     }
+
+    public List<Photo> findPhotosByAlbumId(Long id) {
+        return photoRepository.findByAlbumId(id);
+    }
+
+
 
 
 }

@@ -2,6 +2,7 @@ package com.project.release.domain.album;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -11,6 +12,7 @@ import java.util.List;
 import static javax.persistence.FetchType.*;
 @Getter
 @Entity
+@NoArgsConstructor
 public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +38,7 @@ public class Photo {
 
     @OneToMany(mappedBy = "photo")
     private List<Comment> comments = new ArrayList<>();
-    //연관관계 매핑..
+    //연관관계 매핑
     public void setAlbum(Album album) {
         this.album = album;
         album.getPhotoList().add(this);

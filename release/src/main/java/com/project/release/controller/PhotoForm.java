@@ -11,5 +11,4 @@ public class PhotoForm {
     private MultipartFile photo;
     private String title;
     private String description;
-
 }
