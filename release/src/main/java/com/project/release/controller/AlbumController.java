@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -37,11 +38,12 @@ public class AlbumController {
 
     // 유저 네임 받아서.... 유저 아이디 찾아서 앨범정보에 넣기
     // restcontroller에서 모델 어트리뷰트 ...괜찮은것인가?
+    // 의문점 1. restcontroller에서 Postmapping으로 받는 모델 어트리뷰트 ...괜찮은것인가?
+    // 2. 데베에 저장하는거랑 파일 생성이랑 하나의 트랜잭션..? 으로 묶기.. ( 파일이 기존에 존재하는 IOE 발생시 디비에는 앨범정보가 들어가는데, 파일은 제대로 생성이 안됨..
+   //  트랜잭션 안에 넣거나 파일 이름 유니크하게 바꿔서 파일 이미 존재해도 오류 안나게...?
     @PostMapping("/{userName}/album")
     public void publishAlbum(@ModelAttribute MultiForm request, @PathVariable String userName) throws IOException {
         //1. 앨범 폼 받기
-        System.out.println(request.toString());
-        System.out.println(request.getAlbumForm().getTitle());
         Long albumId = albumService.createAlbum(request, userName);
 
         saveFile(request.getAlbumForm().getPhoto(), resourcesLocation + "/" + userName + "/album");
@@ -54,20 +56,15 @@ public class AlbumController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            index.getAndIncrement(); // .....?? 일케하래요....??
-
+            index.getAndIncrement(); // .....?? 인텔리제이가 일케하래요....
             System.out.println(photoRequest.getPhoto().getOriginalFilename());
             System.out.println(photoRequest.getTitle());
 
         });
-//        return "/";
-        // 사용자 앨범 리스트 페이지로
-        // return "userName";
+        // 뷰 라우터에서 다시 앨범 열람 페이지로 넘어갈것.
 
     }
 
-
-    //
     @GetMapping("/{userName}/album/{albumId}")
     public ResponseAlbum showAlbum(@PathVariable String userName, @PathVariable Long albumId) {
 
@@ -77,33 +74,6 @@ public class AlbumController {
         ResponseAlbum responseAlbum = new ResponseAlbum(album, photoList);
 
         return responseAlbum;
-    }
-
-
-    @PostMapping("/test")
-    public void tagTest(){
-        stringToTags("#택1, #택2, #택3 우효 ~, 그냥 스트링, #택4 이건?");
-    }
-
-    // tags 스트링을 쪼개 주기..
-            /*    해시태그 작성 방식..
-            #태그, #태그, ...
-            #이런 식으로 띄어쓰기는 허용하지 않음
-            #해시_태그 이건 괜찮*/
-    public void stringToTags(String tags) {
-        //1. , " " 로 쪼개기
-        //2. #있는 것만 #떼고 Tag에 저장
-        StringTokenizer tk = new StringTokenizer(tags, ", ");
-
-        while (tk.hasMoreTokens()) {
-            String token = tk.nextToken();
-            System.out.println("token = " + token);
-            if (token.charAt(0) == '#') {
-                Tag tag = Tag.builder().token(token.substring(1)).build();
-                System.out.println("tag = " + tag.getTag());
-                tagService.save(tag);
-            }
-        }
     }
 
 

@@ -17,14 +17,14 @@ public class Tag {
     @Column(name = "tag_id")
     private Long tagId;
 
-    private String tag;
+    private String tagName;
 
     @OneToMany(mappedBy = "tag")
     private List<AlbumTag> albumTags = new ArrayList<>();
 
     @Builder
-    public Tag(String token) {
-        this.tag = token;
+    public Tag(String tagName) {
+        this.tagName = tagName;
     }
 
 }
