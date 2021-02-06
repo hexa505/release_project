@@ -17,6 +17,4 @@ public class PhotoFavorite {
 
     //private User user;
 
-
-
 }

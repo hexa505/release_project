@@ -12,7 +12,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class AlbumTag {
 
-    //이거 필요한건감 기본으로 필요한가..? 함 지워보고 해보기..
+    //이거 필요없을줄알았는데 지우고 실행하니까 오류나는거 보니 필요한듯....
+    //기본으로 다 넣나봄....
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "album_tag_id")

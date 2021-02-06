@@ -1,6 +1,7 @@
 package com.project.release.repositoriy;
 
 import com.project.release.domain.album.Album;
+import com.project.release.domain.album.Photo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -36,5 +37,7 @@ public class AlbumRepository {
     public List<Album> findByUserName(String userName) {
         return em.createQuery("select a from Album where a.userName = :userName", Album.class).setParameter("userName", userName).getResultList();
     }
+
+
 
 }

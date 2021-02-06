@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor
-public class Album extends BaseTimeEntity {
+public class Album {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "album_id")

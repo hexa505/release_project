@@ -4,7 +4,6 @@ package com.project.release.service;
 import com.project.release.controller.AlbumForm;
 import com.project.release.controller.MultiForm;
 import com.project.release.domain.album.Album;
-import com.project.release.domain.album.Tag;
 import com.project.release.repositoriy.AlbumRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,34 +21,9 @@ public class AlbumService {
 
     private final AlbumRepository albumRepository;
     private final AlbumTagService albumTagService;
-    //앨범 생성,,,
-    //사진 추가 .....
-
-//    @Transactional
-//    public Long save(Album album) {
-//        albumRepository.save(album);
-//        return album.getAlbumId();
-//    }
-
-    //앨범 저장하는거,,,,
-//    @Transactional
-//    public Long createAlbum(MultiForm form, Long userId, String userName) {
-//
-//        Album album = Album.builder().userId(userId)
-//                .userName(userName)
-//                .thumbnail(form.getPhoto().getOriginalFilename())
-//                .description(form.getPhotoForm().getDescription())
-//                .title(form.getPhotoForm().getTitle()).build();
-//
-//        albumRepository.save(album);
-//
-//        // 앨범아이디 반환하고 싶은뎁쇼 일케하면 되낭~
-//        return album.getAlbumId();
-//    }
-
 
     @Transactional
-    public Long createAlbum(MultiForm form, String userName){
+    public Long createAlbum(MultiForm form, String userName) {
 
         //userName으로 유저 엔티티 찾아서 유저 인스턴스 넣는 걸로 바꿀 것
         AlbumForm albumForm = form.getAlbumForm();
@@ -62,8 +36,6 @@ public class AlbumService {
         return album.getAlbumId();
 
     }
-
-
 
     // tags 스트링을 쪼개 주기..
             /*    해시태그 작성 방식..

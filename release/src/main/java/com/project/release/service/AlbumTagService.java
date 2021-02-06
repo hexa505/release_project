@@ -28,7 +28,7 @@ public class AlbumTagService {
                     AlbumTag albumTag = new AlbumTag();
                     albumTag.setAlbum(album); // 앨범에 추가하고
                     Tag tag = tagService.findOne(tagService.findOrCreateTag(hashtag)); //Tag repository에 저장된 태그의 아이디를 받아서?? 아님 엔티티받는 걸로 바꿀까.. 하여간
-                    albumTag.setTag(tag); //연결테이블에 추가하기....
+                    albumTag.setTag(tag); //연결테이블에 태그 추가하기....
                    albumTagRepository.save(albumTag);
                 }
         );
