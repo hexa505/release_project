@@ -11,9 +11,9 @@ public class UserResponseDTO {
 
     private String introduction;
 
-    public UserResponseDTO(User user) {
+    public UserResponseDTO(User user, String path) {
         this.name = user.getName();
-        this.pic = user.getPic();
+        this.pic = user.getPic() != null ? path + "/" + user.getPic() : null;
         this.introduction = user.getIntroduction();
     }
 
