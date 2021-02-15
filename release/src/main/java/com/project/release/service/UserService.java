@@ -91,5 +91,7 @@ public class UserService {
         return userRepository.findByName(name);
     }
 
+    public User findById(Long id) {return userRepository.findById(id);}
+
 
 }

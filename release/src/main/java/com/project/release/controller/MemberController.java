@@ -90,7 +90,7 @@ public class MemberController {
         return;
     }
 
-    // 회원 탈
+    // 회원 탈퇴 
 
 
 }
