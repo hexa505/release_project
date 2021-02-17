@@ -4,6 +4,7 @@ package com.project.release.controller;
 import com.project.release.domain.album.Album;
 import com.project.release.domain.album.Photo;
 import com.project.release.service.AlbumService;
+import com.project.release.service.AlbumTagService;
 import com.project.release.service.PhotoService;
 import com.project.release.service.TagService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
+import static com.project.release.controller.AlbumDTO.*;
+import static com.project.release.controller.AlbumDTO.toDto;
 
 @Slf4j
 @RestController
@@ -31,6 +37,24 @@ public class AlbumController {
     private final AlbumService albumService;
     private final PhotoService photoService;
     private final TagService tagService;
+    private final AlbumTagService albumTagService;
+
+
+    // 앨범 목록과 태그들 모아서 보내기
+    // 태그 디티오 바꾸기..................
+    // 사용자 앨범 리스트 조회/ 태그 조회 분리하기
+    @GetMapping("/{userName}")
+    public AlbumTagResponse 앨범태그조회(@PathVariable("userName") String userName) {
+        List<AlbumResponse> albumResponseList = new ArrayList<>();
+        List<TagResponse> tagResponseList = new ArrayList<>();
+        albumService.findAlbumsByUserName(userName).stream().map(album ->{
+            albumResponseList.add(toDto(album));
+            tagResponseList.addAll(toDto2(albumTagService.getTagsByAlbumId(album.getAlbumId())));
+                 return null;
+        }).collect(Collectors.toList());
+        return new AlbumTagResponse(albumResponseList, tagResponseList);
+    }
+
 
     // 유저 네임 받아서.... 유저 아이디 찾아서 앨범정보에 넣기
     // restcontroller에서 모델 어트리뷰트 ...괜찮은것인가?
@@ -58,15 +82,54 @@ public class AlbumController {
     }
 
 
-    @GetMapping("/{userName}/album/{albumId}") //DTO? 써보기..
-    public AlbumDTO.Response showAlbum(@PathVariable("userName") String userName, @PathVariable("albumId") Long albumId) {
+
+    @GetMapping("/{userName}/album/{albumId}") //userName사용안하긴함
+    public Response showAlbum(@PathVariable("userName") String userName, @PathVariable("albumId") Long albumId) {
+        return showAlbum(albumId);
+    }
+
+    // 포토 리스폰스는 num 랑 photothumbnail만 보내고 포토클릭하면 사진 조회...
+    public Response showAlbum(Long albumId) {
         Album album = albumService.findOneById(albumId);
         List<Photo> photoList = photoService.findPhotosByAlbumId(albumId);
         System.out.println("photoList.get(0).getPic().toString() = " + photoList.get(0).getPic().toString());
-        AlbumDTO.Response response = AlbumDTO.Response.of(album, photoList);
+        Response response = Response.of(album, photoList, albumTagService.getTagsByAlbumId(albumId));
         return response;
     }
 
+
+    //앨범 열람페이지에서 앨범 표지, 사진 각각 수정 버튼 누르면 한 페이지 수정.....페이지 가서.....수정 포스트....
+    // 앨범 수정 폼 ->
+    @PostMapping("/{userName}/album/{albumId}")
+    public void editAlbum(@PathVariable("userName") String userName, @PathVariable("albumId") Long albumId) {
+
+    }
+
+    //앨범 수정.......
+    // 앨범 수정 폼 ->
+    @PostMapping("/{userName}/album/{albumId}/{num}")
+    public void editPhoto(@PathVariable("userName") String userName, @PathVariable("albumId") Long albumId, @PathVariable("num") int num) {
+
+    }
+
+    // {id} 필요한가..?
+    // 사진 조회
+    @GetMapping("/{id}/album/{albumId}/{num}")
+    public PhotoResponse showPhoto(@PathVariable("albumId") Long albumId, @PathVariable("num") int num) {
+        List<Photo> photoList = photoService.findPhotosByAlbumId(albumId);
+        System.out.println("photoList = " + photoList);
+        return toDto(photoList.get(num));
+    }
+
+
+    @DeleteMapping("/{userName}/album/{albumId}")
+    public void deleteAlbum(@PathVariable("userName") String userName, @PathVariable("albumId") Long albumId){
+
+    }
+
+
+
+    // @GetMapping("/{username}?tags=")
 
 
     public void saveFile(MultipartFile file, String directoryPath) throws IOException {

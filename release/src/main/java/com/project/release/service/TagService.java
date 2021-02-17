@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -23,6 +25,13 @@ public class TagService {
         } else return tagRepository.findByName(tagName).get(0).getTagId();
     }
 
+    //앨범아이디로 태그 리스트조회하기
+    public List<Tag> findByAlbumId(Long albumId) {
+        return tagRepository.findByAlbumId(albumId);
+    }
+
+
+    //태그 아이디로 찾는고
     public Tag findOne(Long id) {
         return tagRepository.findOne(id);
     }

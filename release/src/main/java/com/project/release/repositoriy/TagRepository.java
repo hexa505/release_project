@@ -24,6 +24,12 @@ public class TagRepository {
         return em.createQuery("select t from Tag t where t.tagName = :tagName", Tag.class).setParameter("tagName", tagName).getResultList();
     }
 
+    public List<Tag> findByAlbumId(Long albumId) {
+        return em.createQuery("select t from Tag t where t.albumId = :albumId", Tag.class).setParameter("albumId", albumId).getResultList();
+    }
+
+
+    //요거는... 태그 아이디로 조회하기
     public Tag findOne(Long id) {
         return em.find(Tag.class, id);
     }

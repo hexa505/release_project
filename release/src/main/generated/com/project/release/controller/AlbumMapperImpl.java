@@ -2,13 +2,15 @@ package com.project.release.controller;
 
 import com.project.release.controller.AlbumDTO.AlbumResponse;
 import com.project.release.controller.AlbumDTO.PhotoResponse;
+import com.project.release.controller.AlbumDTO.TagResponse;
 import com.project.release.domain.album.Album;
 import com.project.release.domain.album.Photo;
+import com.project.release.domain.album.Tag;
 import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2021-02-06T18:26:13+0900",
+    date = "2021-02-16T00:19:16+0900",
     comments = "version: 1.4.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 public class AlbumMapperImpl implements AlbumMapper {
@@ -45,5 +47,18 @@ public class AlbumMapperImpl implements AlbumMapper {
         albumResponse.setUserName( album.getUserName() );
 
         return albumResponse;
+    }
+
+    @Override
+    public TagResponse to(Tag tag) {
+        if ( tag == null ) {
+            return null;
+        }
+
+        TagResponse tagResponse = new TagResponse();
+
+        tagResponse.setTagName( tag.getTagName() );
+
+        return tagResponse;
     }
 }

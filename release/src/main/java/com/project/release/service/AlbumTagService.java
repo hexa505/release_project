@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -34,6 +35,13 @@ public class AlbumTagService {
         );
 
     }
+
+    @Transactional
+    public List<Tag> getTagsByAlbumId(Long albumId) {
+        return albumTagRepository.getTagsByAlbumId(albumId);
+    }
+
+
 
 
 }

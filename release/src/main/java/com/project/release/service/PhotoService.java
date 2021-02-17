@@ -29,6 +29,7 @@ public class PhotoService {
                 .title(photoForm.getTitle())
                 .num(index)
                 .build();
+        photo.setAlbum(album); //이거 ..........
         return photoRepository.save(photo);
     }
 

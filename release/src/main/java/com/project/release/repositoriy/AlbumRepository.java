@@ -1,8 +1,12 @@
 package com.project.release.repositoriy;
 
 import com.project.release.domain.album.Album;
+import com.project.release.domain.album.AlbumTag;
 import com.project.release.domain.album.Photo;
+import com.project.release.domain.album.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -31,13 +35,11 @@ public class AlbumRepository {
     }
 
     public List<Album> findByAlbumTitle(String title){
-        return em.createQuery("select a from Album where a.title = :title", Album.class).setParameter("title", title).getResultList();
+        return em.createQuery("select a from Album a where a.title = :title", Album.class).setParameter("title", title).getResultList();
     }
 
     public List<Album> findByUserName(String userName) {
-        return em.createQuery("select a from Album where a.userName = :userName", Album.class).setParameter("userName", userName).getResultList();
+        return em.createQuery("select a from Album a where a.userName = :userName", Album.class).setParameter("userName", userName).getResultList();
     }
-
-
 
 }
