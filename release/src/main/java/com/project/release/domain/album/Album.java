@@ -16,9 +16,10 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor
-public class Album extends BaseTimeEntity{
+public class Album extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "album_id")
     private Long albumId;
 
@@ -41,10 +42,18 @@ public class Album extends BaseTimeEntity{
     private List<Photo> photoList = new ArrayList<>();
 
     @Builder
-    public Album( String thumbnail, String description, String title, String userName) {
+    public Album(String thumbnail, String description, String title, String userName) {
         this.thumbnail = thumbnail;
         this.description = description;
         this.title = title;
         this.userName = userName;
     }
+
+    public void updateAlbum(String thumbnail, String description, String title) {
+        this.thumbnail = thumbnail;
+        this.description = description;
+        this.title = title;
+    }
+
+
 }

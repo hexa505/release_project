@@ -52,4 +52,12 @@ public class Photo {
         this.title = title;
         this.description = description;
     }
+
+    public void updatePhoto(String pic, String title, String description) {
+        this.pic = pic;
+        this.title = title;
+        this.description = description;
+    }
+
+
 }

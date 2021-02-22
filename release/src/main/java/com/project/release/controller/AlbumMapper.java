@@ -8,10 +8,10 @@ import org.mapstruct.Mapper;
 @Mapper
 public interface AlbumMapper {
 
-    AlbumDTO.PhotoResponse to(Photo photo);
+    AlbumResponseDTO.PhotoResponse to(Photo photo);
 
-    AlbumDTO.AlbumResponse to(Album album);
+    AlbumResponseDTO.AlbumResponse to(Album album);
 
-    AlbumDTO.TagResponse to(Tag tag);
+    AlbumResponseDTO.TagResponse to(Tag tag);
 
 }

@@ -1,5 +1,6 @@
 package com.project.release.domain.album;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class Tag {
 
     private String tagName;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "tag")
     private List<AlbumTag> albumTags = new ArrayList<>();
 

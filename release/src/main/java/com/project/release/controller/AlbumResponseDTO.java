@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AlbumDTO {
+public class AlbumResponseDTO {
 
     private static final AlbumMapper mapper = Mappers.getMapper(AlbumMapper.class);
 
@@ -43,9 +43,7 @@ public class AlbumDTO {
     @Setter
     @NoArgsConstructor
     public static class TagResponse {
-
         private String tagName;
-
     }
 
 
@@ -60,11 +58,11 @@ public class AlbumDTO {
     }
 
     private static List<PhotoResponse> toDto(List<Photo> photoList) {
-        return photoList.stream().map(AlbumDTO::toDto).collect(Collectors.toList());
+        return photoList.stream().map(AlbumResponseDTO::toDto).collect(Collectors.toList());
     }
 
     public static List<TagResponse> toDto2(List<Tag> tagList) {
-        return tagList.stream().map(AlbumDTO::toDto).collect(Collectors.toList());
+        return tagList.stream().map(AlbumResponseDTO::toDto).collect(Collectors.toList());
     }
 
 
@@ -88,23 +86,15 @@ public class AlbumDTO {
         }
 
     }
-
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class AlbumTagResponse {
-
-        private List<AlbumResponse> albumResponse;
-        private List<TagResponse> tagResponseList;
-
-        public AlbumTagResponse(List<AlbumResponse> albumResponse, List<TagResponse> tagResponseList) {
+    public static class AlbumTagResponse<T, S> {
+        private List<T> albumResponse;
+        private List<S> tagResponseList;
+        public AlbumTagResponse(List<T> albumResponse, List<S> tagResponseList) {
             this.albumResponse = albumResponse;
             this.tagResponseList = tagResponseList;
         }
    }
-
-
-
-
-
 }

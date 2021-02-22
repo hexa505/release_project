@@ -4,6 +4,8 @@ import com.project.release.domain.album.Album;
 import com.project.release.domain.album.AlbumTag;
 import com.project.release.domain.album.Photo;
 import com.project.release.domain.album.Tag;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -41,6 +45,9 @@ public class AlbumRepository {
     public List<Album> findByUserName(String userName) {
         return em.createQuery("select a from Album a where a.userName = :userName", Album.class).setParameter("userName", userName).getResultList();
     }
+
+
+
 
 
 }

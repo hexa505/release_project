@@ -1,8 +1,8 @@
 package com.project.release.controller;
 
-import com.project.release.controller.AlbumDTO.AlbumResponse;
-import com.project.release.controller.AlbumDTO.PhotoResponse;
-import com.project.release.controller.AlbumDTO.TagResponse;
+import com.project.release.controller.AlbumResponseDTO.AlbumResponse;
+import com.project.release.controller.AlbumResponseDTO.PhotoResponse;
+import com.project.release.controller.AlbumResponseDTO.TagResponse;
 import com.project.release.domain.album.Album;
 import com.project.release.domain.album.Photo;
 import com.project.release.domain.album.Tag;

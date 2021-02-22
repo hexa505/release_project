@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -35,6 +37,16 @@ public class TagService {
     public Tag findOne(Long id) {
         return tagRepository.findOne(id);
     }
+
+
+
+    // List<Tag> -> List<String>
+    public List<String> tagToString(List<Tag> tagList) {
+        List<String> tagStringList = new ArrayList<>();
+        tagList.stream().map(tag -> tagStringList.add(tag.getTagName())).collect(Collectors.toList());
+        return tagStringList;
+    }
+
 
 
 }

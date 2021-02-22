@@ -14,30 +14,24 @@ public class PhotoRepository {
 
     private final EntityManager em;
 
-    // 저장,,,,수정,,,,,,
-    //조회,,,
     public Long save(Photo photo) {
         em.persist(photo);
         return photo.getPhotoId();
     }
 
-    //아이디로 조회
-    public Photo findOne(Long id) {
-        return em.find(Photo.class, id);
-    }
-
-    //이건 쓸일이 잇으려나?
     public List<Photo> findAll() {
         return em.createQuery("select p from Photo p", Photo.class).getResultList();
     }
 
-    //앨범 아이디로 조회하되
-    //아님 걍 앨범 아이디로 받아온다음에 출력할 때, num순 정렬 조절하는건감,,,
-    //일단 후자로함
     public List<Photo> findByAlbumId(Long id) {
                 return em.createQuery("select p from Photo p where p.album.albumId = :id", Photo.class).setParameter("id", id).getResultList();
+    }
 
-        //        return em.createQuery("select p from Photo p where p.album_id = :id", Photo.class).setParameter("id", id).getResultList();
+
+    public Photo findOneByAlbumIdAndNum(Long albumId, int num) {
+        return em.createQuery(
+                "select p from Photo p where p.album.albumId = :albumId AND p.num = :num", Photo.class
+        ).setParameter("albumId", albumId).setParameter("num", num).getResultList().get(0);
     }
 
 }
