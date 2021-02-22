@@ -42,4 +42,5 @@ public class AlbumRepository {
         return em.createQuery("select a from Album a where a.userName = :userName", Album.class).setParameter("userName", userName).getResultList();
     }
 
+
 }

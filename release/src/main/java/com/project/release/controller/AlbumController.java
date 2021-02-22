@@ -7,6 +7,7 @@ import com.project.release.service.AlbumService;
 import com.project.release.service.AlbumTagService;
 import com.project.release.service.PhotoService;
 import com.project.release.service.TagService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,9 +37,7 @@ public class AlbumController {
 
     private final AlbumService albumService;
     private final PhotoService photoService;
-    private final TagService tagService;
     private final AlbumTagService albumTagService;
-
 
     // 앨범 목록과 태그들 모아서 보내기
     // 태그 디티오 바꾸기..................
@@ -57,7 +56,6 @@ public class AlbumController {
 
 
     // 유저 네임 받아서.... 유저 아이디 찾아서 앨범정보에 넣기
-    // restcontroller에서 모델 어트리뷰트 ...괜찮은것인가?
     // 의문점 1. restcontroller에서 Postmapping으로 받는 모델 어트리뷰트 ...괜찮은것인가?
     // 2. 데베에 저장하는거랑 파일 생성이랑 하나의 트랜잭션..? 으로 묶기.. ( 파일이 기존에 존재하는 IOE 발생시 디비에는 앨범정보가 들어가는데, 파일은 제대로 생성이 안됨..
     //  트랜잭션 안에 넣거나 파일 이름 유니크하게 바꿔서 파일 이미 존재해도 오류 안나게...?
@@ -92,11 +90,14 @@ public class AlbumController {
     public Response showAlbum(Long albumId) {
         Album album = albumService.findOneById(albumId);
         List<Photo> photoList = photoService.findPhotosByAlbumId(albumId);
-        System.out.println("photoList.get(0).getPic().toString() = " + photoList.get(0).getPic().toString());
         Response response = Response.of(album, photoList, albumTagService.getTagsByAlbumId(albumId));
         return response;
     }
 
+    @Data
+    private class ShowAlbumResponse {
+
+    }
 
     //앨범 열람페이지에서 앨범 표지, 사진 각각 수정 버튼 누르면 한 페이지 수정.....페이지 가서.....수정 포스트....
     // 앨범 수정 폼 ->
@@ -151,4 +152,5 @@ public class AlbumController {
         Assert.state(!Files.exists(targetPath), fileName + " File alerdy exists.");
         file.transferTo(targetPath);
     }
+
 }
