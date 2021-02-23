@@ -34,4 +34,14 @@ public class PhotoRepository {
         ).setParameter("albumId", albumId).setParameter("num", num).getResultList().get(0);
     }
 
+    public void deletePhotosByAlbumId(Long albumId) {
+       // em.createQuery("delete from Photo p where p.album.albumId = :albumId").setParameter("albumId", albumId);
+
+        findByAlbumId(albumId).stream().forEach(photo -> em.remove(photo));
+    }
+
+    public Photo findOne(Long photoId) {
+        return em.find(Photo.class, photoId);
+    }
+
 }

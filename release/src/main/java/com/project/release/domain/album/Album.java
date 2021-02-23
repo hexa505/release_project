@@ -35,10 +35,10 @@ public class Album extends BaseTimeEntity {
 
     private String userName;
 
-    @OneToMany(mappedBy = "album")
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
     private List<AlbumTag> albumTags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "album")
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
     private List<Photo> photoList = new ArrayList<>();
 
     @Builder

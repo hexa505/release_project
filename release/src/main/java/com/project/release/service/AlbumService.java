@@ -6,6 +6,7 @@ import com.project.release.domain.album.Album;
 import com.project.release.repositoriy.AlbumRepository;
 import com.project.release.repositoriy.album.query.AlbumQueryDTO;
 import com.project.release.repositoriy.album.query.AlbumQueryRepository;
+import com.project.release.repositoriy.album.query2.AlbumQueryRepository2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class AlbumService {
     private final AlbumRepository albumRepository;
     private final AlbumTagService albumTagService;
     private final AlbumQueryRepository albumQueryRepository;
+    private final AlbumQueryRepository2 albumQueryRepository2;
     private final  PhotoService photoService; // 이거 나중에 어케 처리하기.............
 
     @Transactional
@@ -124,9 +126,6 @@ public class AlbumService {
         return albumRepository.findByUserName(userName);
     }
 
-    //유저네임으로 태그 조회
-
-    //앨범이름으로 앨범 조회,,,,
     public List<Album> findAlbumsByAlbumTitle(String title) {
         return albumRepository.findByAlbumTitle(title);
     }
@@ -138,4 +137,15 @@ public class AlbumService {
     public List<AlbumQueryDTO> findByUserNameQuery(String userName) {
         return albumQueryRepository.findByUserNameQuery(userName);
     }
+
+    public com.project.release.repositoriy.album.query2.AlbumQueryDTO findByAlbumIdQuery(Long albumId) {
+        return albumQueryRepository2.findByalbumId(albumId);
+    }
+
+
+    @Transactional
+    public void deleteAlbum(Long albumId) {
+        albumRepository.deleteAlbumById(albumId);
+    }
+
 }

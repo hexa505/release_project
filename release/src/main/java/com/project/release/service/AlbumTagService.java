@@ -41,7 +41,10 @@ public class AlbumTagService {
         return albumTagRepository.getTagsByAlbumId(albumId);
     }
 
-
+    @Transactional
+    public void deleteAlbumTagsByAlbumId(Long albumId) {
+        albumTagRepository.deleteAlbumTagsByAlbumId(albumId);
+    }
 
 
 }

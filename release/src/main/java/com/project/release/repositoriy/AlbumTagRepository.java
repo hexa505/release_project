@@ -23,4 +23,19 @@ public class AlbumTagRepository {
         return em.createQuery("select t from AlbumTag alt join fetch Tag t on alt.tag.tagId = t.tagId where alt.album.albumId = :albumId", Tag.class).setParameter("albumId", albumId).getResultList();
     }
 
+    public List<AlbumTag> findByAlbumId(Long albumId) {
+        return em.createQuery(
+                "select at from AlbumTag at" +
+                        " where at.album.albumId = :albumId", AlbumTag.class
+        ).setParameter("albumId", albumId).getResultList();
+    }
+
+    public void deleteAlbumTagsByAlbumId(Long albumId) {
+     //   em.createQuery("delete from AlbumTag at where at.album.albumId = :albumId").setParameter("albumId", albumId);
+
+        findByAlbumId(albumId).stream().forEach(albumTag -> em.remove(albumTag));
+
+    }
+
+
 }

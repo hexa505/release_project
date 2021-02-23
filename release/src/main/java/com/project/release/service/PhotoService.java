@@ -33,6 +33,8 @@ public class PhotoService {
         return photoRepository.save(photo);
     }
 
+
+
     public List<Photo> findPhotosByAlbumId(Long id) {
         return photoRepository.findByAlbumId(id);
     }
@@ -57,4 +59,13 @@ public class PhotoService {
         save(photo);
     }
 
+    @Transactional
+    public void deletePhotosByAlbumId(Long albumId) {
+        photoRepository.deletePhotosByAlbumId(albumId);
+    }
+
+
+    public Photo finOne(Long photoId) {
+        return photoRepository.findOne(photoId);
+    }
 }

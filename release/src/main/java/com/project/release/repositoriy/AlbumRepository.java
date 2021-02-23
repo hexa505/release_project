@@ -46,7 +46,10 @@ public class AlbumRepository {
         return em.createQuery("select a from Album a where a.userName = :userName", Album.class).setParameter("userName", userName).getResultList();
     }
 
-
+    public void deleteAlbumById(Long albumId) {
+      //  em.createQuery("delete from Album a where a.albumId = :albumId").setParameter("albumId", albumId);
+        em.remove(findOne(albumId));
+    }
 
 
 

@@ -20,7 +20,7 @@ public class AlbumResponseDTO {
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class PhotoResponse {
+    public static class DetailPhoto {
         private Long photoId;
         private int num;
         private String pic;
@@ -31,7 +31,7 @@ public class AlbumResponseDTO {
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class AlbumResponse {
+    public static class DetailAlbum {
         private Long albumId;
         private String thumbnail;
         private String description;
@@ -47,17 +47,37 @@ public class AlbumResponseDTO {
     }
 
 
-    public static PhotoResponse toDto(Photo photo) {
+    @Data
+    @AllArgsConstructor
+    public static class AlbumListAndTagsDTO<T, S> {
+        private T albums;
+        private S tags;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class SimpleAlbumDTO {
+        private String title;
+        private String thumbnail;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class Result<T> {
+        private T data;
+    }
+
+    public static DetailPhoto toDto(Photo photo) {
         return mapper.to(photo);
     }
 
     public static TagResponse toDto(Tag tag) { return mapper.to(tag); }
 
-    public static AlbumResponse toDto(Album album) {
+    public static DetailAlbum toDto(Album album) {
         return mapper.to(album);
     }
 
-    private static List<PhotoResponse> toDto(List<Photo> photoList) {
+    private static List<DetailPhoto> toDto(List<Photo> photoList) {
         return photoList.stream().map(AlbumResponseDTO::toDto).collect(Collectors.toList());
     }
 
@@ -72,15 +92,15 @@ public class AlbumResponseDTO {
     @NoArgsConstructor
     public static class Response {
 
-        private List<PhotoResponse> photoResponseList;
-        private AlbumResponse albumResponse;
+        private List<DetailPhoto> detailPhotoList;
+        private DetailAlbum detailAlbum;
         private List<TagResponse> tagResponseList;
 
         public static Response of(Album album, List<Photo> photoList, List<Tag> tag) {
             System.out.println("album.getAlbumId() = " + album.getAlbumId());
             Response response = new Response();
-            response.albumResponse = toDto(album);
-            response.photoResponseList = toDto(photoList);
+            response.detailAlbum = toDto(album);
+            response.detailPhotoList = toDto(photoList);
             response.tagResponseList = toDto2(tag);
             return response;
         }
@@ -97,4 +117,7 @@ public class AlbumResponseDTO {
             this.tagResponseList = tagResponseList;
         }
    }
+
+
+
 }

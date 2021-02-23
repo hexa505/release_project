@@ -1,7 +1,7 @@
 package com.project.release.controller;
 
-import com.project.release.controller.AlbumResponseDTO.AlbumResponse;
-import com.project.release.controller.AlbumResponseDTO.PhotoResponse;
+import com.project.release.controller.AlbumResponseDTO.DetailAlbum;
+import com.project.release.controller.AlbumResponseDTO.DetailPhoto;
 import com.project.release.controller.AlbumResponseDTO.TagResponse;
 import com.project.release.domain.album.Album;
 import com.project.release.domain.album.Photo;
@@ -10,43 +10,43 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2021-02-22T00:52:59+0900",
+    date = "2021-02-24T01:06:40+0900",
     comments = "version: 1.4.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 public class AlbumMapperImpl implements AlbumMapper {
 
     @Override
-    public PhotoResponse to(Photo photo) {
+    public DetailPhoto to(Photo photo) {
         if ( photo == null ) {
             return null;
         }
 
-        PhotoResponse photoResponse = new PhotoResponse();
+        AlbumResponseDTO.DetailPhoto detailPhoto = new DetailPhoto();
 
-        photoResponse.setPhotoId( photo.getPhotoId() );
-        photoResponse.setNum( photo.getNum() );
-        photoResponse.setPic( photo.getPic() );
-        photoResponse.setTitle( photo.getTitle() );
-        photoResponse.setDescription( photo.getDescription() );
+        detailPhoto.setPhotoId( photo.getPhotoId() );
+        detailPhoto.setNum( photo.getNum() );
+        detailPhoto.setPic( photo.getPic() );
+        detailPhoto.setTitle( photo.getTitle() );
+        detailPhoto.setDescription( photo.getDescription() );
 
-        return photoResponse;
+        return detailPhoto;
     }
 
     @Override
-    public AlbumResponse to(Album album) {
+    public DetailAlbum to(Album album) {
         if ( album == null ) {
             return null;
         }
 
-        AlbumResponse albumResponse = new AlbumResponse();
+        AlbumResponseDTO.DetailAlbum detailAlbum = new DetailAlbum();
 
-        albumResponse.setAlbumId( album.getAlbumId() );
-        albumResponse.setThumbnail( album.getThumbnail() );
-        albumResponse.setDescription( album.getDescription() );
-        albumResponse.setTitle( album.getTitle() );
-        albumResponse.setUserName( album.getUserName() );
+        detailAlbum.setAlbumId( album.getAlbumId() );
+        detailAlbum.setThumbnail( album.getThumbnail() );
+        detailAlbum.setDescription( album.getDescription() );
+        detailAlbum.setTitle( album.getTitle() );
+        detailAlbum.setUserName( album.getUserName() );
 
-        return albumResponse;
+        return detailAlbum;
     }
 
     @Override
