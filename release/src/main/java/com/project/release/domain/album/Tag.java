@@ -20,12 +20,6 @@ public class Tag {
 
     private String tagName;
 
-    /*
-    @JsonIgnore
-    @OneToMany(mappedBy = "tag")
-    private List<AlbumTag> albumTags = new ArrayList<>();
-     */
-
     @Builder
     public Tag(String tagName) {
         this.tagName = tagName;

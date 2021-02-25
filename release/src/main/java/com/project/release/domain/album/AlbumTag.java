@@ -37,6 +37,6 @@ public class AlbumTag {
 
     public void setTag(Tag tag) {
         this.tag = tag;
-        tag.getAlbumTags().add(this);// 이거시 ...잘하는 짓인지....
+       // tag.getAlbumTags().add(this);// 이거시 ...잘하는 짓인지....
     }
 }

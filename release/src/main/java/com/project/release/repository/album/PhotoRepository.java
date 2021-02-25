@@ -36,7 +36,6 @@ public class PhotoRepository {
 
     public void deletePhotosByAlbumId(Long albumId) {
        // em.createQuery("delete from Photo p where p.album.albumId = :albumId").setParameter("albumId", albumId);
-
         findByAlbumId(albumId).stream().forEach(photo -> em.remove(photo));
     }
 

@@ -139,7 +139,7 @@ public class AlbumService {
     }
 
     public com.project.release.repository.album.query2.AlbumQueryDTO findByAlbumIdQuery(Long albumId) {
-        return albumQueryRepository2.findByalbumId(albumId);
+        return albumQueryRepository2.findByAlbumId(albumId);
     }
 
 

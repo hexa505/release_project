@@ -37,13 +37,14 @@ public class AlbumQueryRepository2 {
         ).setParameter("albumId", albumId).getResultList().stream().findFirst().orElse(null ); //이래도되나ㄱ-
     }
 
-    public AlbumQueryDTO findByalbumId(Long albumId) {
+    public AlbumQueryDTO findByAlbumId(Long albumId) {
         AlbumQueryDTO albumQueryDTO = findOne(albumId);
         albumQueryDTO.setPhotoList(getSimplePhotoDTO(albumId));
         albumQueryDTO.setAlbumTags(getTagDTO(albumId));
 
         return albumQueryDTO;
     }
+
 
 
 
