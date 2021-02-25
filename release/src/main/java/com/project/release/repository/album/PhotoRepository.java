@@ -31,7 +31,7 @@ public class PhotoRepository {
     public Photo findOneByAlbumIdAndNum(Long albumId, int num) {
         return em.createQuery(
                 "select p from Photo p where p.album.albumId = :albumId AND p.num = :num", Photo.class
-        ).setParameter("albumId", albumId).setParameter("num", num).getResultList().stream().findFirst().orElse(null );
+        ).setParameter("albumId", albumId).setParameter("num", num).getResultList().get(0);
     }
 
     public void deletePhotosByAlbumId(Long albumId) {
