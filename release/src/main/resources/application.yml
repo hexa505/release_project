@@ -4,11 +4,6 @@ spring:
     url: jdbc:h2:tcp://localhost/~/release
     username: sa  # 사용자 이름 (로그인 시 사용)
     password:
-  main:
-    banner-mode: off
-  output:
-    ansi:
-      enabled: always
   jpa:
     open-in-view: false
     hibernate:

@@ -12,5 +12,4 @@ public interface AlbumMapper {
     AlbumResponseDTO.DetailAlbum to(Album album);
     AlbumResponseDTO.TagResponse to(Tag tag);
 
-
 }

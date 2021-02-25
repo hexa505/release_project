@@ -35,6 +35,8 @@ public class Album extends BaseTimeEntity {
 
     private String userName;
 
+    private Long version;
+
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
     private List<AlbumTag> albumTags = new ArrayList<>();
 

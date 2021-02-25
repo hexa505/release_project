@@ -116,19 +116,6 @@ public class AlbumController {
     }
 
     /**
-     * 잘못만들었는데 지우기 아까워서 냅둠 1
-     *
-     * @param userName
-     * @param albumId
-     * @return
-     */
-    @GetMapping("/api/v2/{userName}/album/{albumId}")
-    public List<AlbumQueryDTO> showAlbumV2(@PathVariable("userName") String userName,
-                                           @PathVariable("albumId") Long albumId) {
-        return albumService.findByUserNameQuery(userName);
-    }
-
-    /**
      * 앨범 열람 - 디테일 앨범정보 + 태그 +심플 포토 포토아이디
      * @param userName
      * @param albumId
@@ -183,6 +170,7 @@ public class AlbumController {
 
     /**
      * 앨범 삭제
+     *
      * @param userName
      * @param albumId
      */
@@ -196,5 +184,18 @@ public class AlbumController {
     }
 
 
+
+    /**
+     * 잘못만들었는데 지우기 아까워서 냅둠 1
+     *
+     * @param userName
+     * @param albumId
+     * @return
+     */
+    @GetMapping("/api/v2/{userName}/album/{albumId}")
+    public List<AlbumQueryDTO> showAlbumV2(@PathVariable("userName") String userName,
+                                           @PathVariable("albumId") Long albumId) {
+        return albumService.findByUserNameQuery(userName);
+    }
 
 }

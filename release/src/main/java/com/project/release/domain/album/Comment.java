@@ -27,11 +27,7 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
-    /*
-     * 자기 참조 일케 쓰는거 맞는지 몰겠넹 데베에 잘 표가 안남;
-     * */
-
+    
     @OneToOne
     @JoinColumn(name = "comment_id")
     private Comment parent;
