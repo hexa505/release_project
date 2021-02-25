@@ -64,6 +64,7 @@ public class UserServiceTest {
         fail("예외가 발생해야 함 ");
     }
 
+    /*
     @Test(expected = IllegalStateException.class)
     public void 회원수정_중복이름체크() throws Exception{
         User user1 = User.builder()
@@ -96,6 +97,8 @@ public class UserServiceTest {
 
         fail("예외가 발생해야 함 ");
     }
+
+     */
 
 
 

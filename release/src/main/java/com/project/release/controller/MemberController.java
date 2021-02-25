@@ -67,6 +67,10 @@ public class MemberController {
     }
 
     /*
+    현재 사용자 조회
+     */
+
+    /*
     회원 조회
      */
     @GetMapping("/members/{username}")
@@ -90,7 +94,7 @@ public class MemberController {
         return;
     }
 
-    // 회원 탈
+    // 회원 탈퇴 
 
 
 }
