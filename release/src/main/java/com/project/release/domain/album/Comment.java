@@ -7,6 +7,8 @@ import lombok.Getter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Getter
 @Entity
 public class Comment {
@@ -21,9 +23,9 @@ public class Comment {
 
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "photo_id")
-    private Photo photo;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "album_id")
+    private Album album;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
