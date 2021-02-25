@@ -37,6 +37,8 @@ dependencies {
 	compile group: 'net.coobird', name: 'thumbnailator', version: '0.4.11'
 	compile group: 'com.drewnoakes', name: 'metadata-extractor', version: '2.15.0'
 
+	implementation 'org.mapstruct:mapstruct:1.4.1.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.1.Final'
 }
 
 test {
