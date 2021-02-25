@@ -1,6 +1,6 @@
 package com.project.release.repository;
 
-import com.project.release.domain.Favorite;
+import com.project.release.domain.album.Favorite;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

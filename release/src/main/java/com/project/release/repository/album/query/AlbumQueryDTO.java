@@ -1,7 +1,5 @@
-package com.project.release.repositoriy.album.query;
+package com.project.release.repository.album.query;
 
-import com.project.release.domain.album.AlbumTag;
-import com.project.release.domain.album.Photo;
 import lombok.Data;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.project.release.repositoriy;
+package com.project.release.repository.album;
 
 import com.project.release.domain.album.Album;
 import com.project.release.domain.album.AlbumTag;

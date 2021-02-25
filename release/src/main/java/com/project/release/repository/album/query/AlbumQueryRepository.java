@@ -1,8 +1,5 @@
-package com.project.release.repositoriy.album.query;
+package com.project.release.repository.album.query;
 
-import com.project.release.domain.album.Album;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

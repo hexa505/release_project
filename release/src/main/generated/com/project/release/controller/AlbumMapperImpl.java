@@ -10,7 +10,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2021-02-24T01:06:40+0900",
+    date = "2021-02-26T00:39:43+0900",
     comments = "version: 1.4.1.Final, compiler: javac, environment: Java 11.0.9 (Oracle Corporation)"
 )
 public class AlbumMapperImpl implements AlbumMapper {
@@ -21,7 +21,7 @@ public class AlbumMapperImpl implements AlbumMapper {
             return null;
         }
 
-        AlbumResponseDTO.DetailPhoto detailPhoto = new DetailPhoto();
+        DetailPhoto detailPhoto = new DetailPhoto();
 
         detailPhoto.setPhotoId( photo.getPhotoId() );
         detailPhoto.setNum( photo.getNum() );
@@ -38,7 +38,7 @@ public class AlbumMapperImpl implements AlbumMapper {
             return null;
         }
 
-        AlbumResponseDTO.DetailAlbum detailAlbum = new DetailAlbum();
+        DetailAlbum detailAlbum = new DetailAlbum();
 
         detailAlbum.setAlbumId( album.getAlbumId() );
         detailAlbum.setThumbnail( album.getThumbnail() );

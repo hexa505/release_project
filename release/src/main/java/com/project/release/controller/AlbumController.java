@@ -3,7 +3,7 @@ package com.project.release.controller;
 
 import com.project.release.domain.album.Album;
 import com.project.release.domain.album.Photo;
-import com.project.release.repositoriy.album.query.AlbumQueryDTO;
+import com.project.release.repository.album.query.AlbumQueryDTO;
 import com.project.release.service.AlbumService;
 import com.project.release.service.AlbumTagService;
 import com.project.release.service.PhotoService;
@@ -122,8 +122,8 @@ public class AlbumController {
      * @return
      */
     @GetMapping("/api/v3/{userName}/album/{albumId}")
-    public com.project.release.repositoriy.album.query2.AlbumQueryDTO showAlbumV3(@PathVariable("userName") String userName,
-                                                                                  @PathVariable("albumId") Long albumId) {
+    public com.project.release.repository.album.query2.AlbumQueryDTO showAlbumV3(@PathVariable("userName") String userName,
+                                                                                 @PathVariable("albumId") Long albumId) {
         return albumService.findByAlbumIdQuery(albumId);
     }
 

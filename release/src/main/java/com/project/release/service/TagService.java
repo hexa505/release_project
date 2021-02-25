@@ -2,7 +2,7 @@ package com.project.release.service;
 
 
 import com.project.release.domain.album.Tag;
-import com.project.release.repositoriy.TagRepository;
+import com.project.release.repository.album.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

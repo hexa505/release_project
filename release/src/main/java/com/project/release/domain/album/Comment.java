@@ -1,7 +1,8 @@
 package com.project.release.domain.album;
 
+import com.project.release.domain.user.User;
 import lombok.Getter;
-import org.apache.tomcat.jni.Local;
+
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

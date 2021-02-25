@@ -1,4 +1,4 @@
-package com.project.release.domain;
+package com.project.release.domain.album;
 
 import com.project.release.domain.user.User;
 import lombok.Builder;

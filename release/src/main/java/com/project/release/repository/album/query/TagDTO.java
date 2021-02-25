@@ -1,4 +1,4 @@
-package com.project.release.repositoriy.album.query2;
+package com.project.release.repository.album.query;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

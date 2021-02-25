@@ -3,10 +3,10 @@ package com.project.release.service;
 
 import com.project.release.controller.AlbumRequestDTO;
 import com.project.release.domain.album.Album;
-import com.project.release.repositoriy.AlbumRepository;
-import com.project.release.repositoriy.album.query.AlbumQueryDTO;
-import com.project.release.repositoriy.album.query.AlbumQueryRepository;
-import com.project.release.repositoriy.album.query2.AlbumQueryRepository2;
+import com.project.release.repository.album.AlbumRepository;
+import com.project.release.repository.album.query.AlbumQueryDTO;
+import com.project.release.repository.album.query.AlbumQueryRepository;
+import com.project.release.repository.album.query2.AlbumQueryRepository2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -138,7 +138,7 @@ public class AlbumService {
         return albumQueryRepository.findByUserNameQuery(userName);
     }
 
-    public com.project.release.repositoriy.album.query2.AlbumQueryDTO findByAlbumIdQuery(Long albumId) {
+    public com.project.release.repository.album.query2.AlbumQueryDTO findByAlbumIdQuery(Long albumId) {
         return albumQueryRepository2.findByalbumId(albumId);
     }
 
