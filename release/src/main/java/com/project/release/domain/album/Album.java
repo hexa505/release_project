@@ -1,6 +1,7 @@
 package com.project.release.domain.album;
 
 import com.project.release.domain.BaseTimeEntity;
+import com.project.release.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,10 +24,10 @@ public class Album extends BaseTimeEntity {
     @Column(name = "album_id")
     private Long albumId;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column
     private String thumbnail;
 
     private String description;
@@ -44,11 +45,12 @@ public class Album extends BaseTimeEntity {
     private List<Photo> photoList = new ArrayList<>();
 
     @Builder
-    public Album(String thumbnail, String description, String title, String userName) {
+    public Album(String thumbnail, String description, String title, String userName, User user) {
         this.thumbnail = thumbnail;
         this.description = description;
         this.title = title;
         this.userName = userName;
+        this.user = user;
     }
 
     public void updateAlbum(String thumbnail, String description, String title) {
