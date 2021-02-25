@@ -34,9 +34,6 @@ public class Photo {
     private String description;
 
     @OneToMany(mappedBy = "photo")
-    private List<PhotoFavorite> photoFavoriteList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "photo")
     private List<Comment> comments = new ArrayList<>();
     //연관관계 매핑
     public void setAlbum(Album album) {
