@@ -16,7 +16,7 @@ public class PhotoRepository {
 
     public Long save(Photo photo) {
         em.persist(photo);
-        return photo.getPhotoId();
+        return photo.getId();
     }
 
     public List<Photo> findAll() {
@@ -24,13 +24,13 @@ public class PhotoRepository {
     }
 
     public List<Photo> findByAlbumId(Long id) {
-                return em.createQuery("select p from Photo p where p.album.albumId = :id", Photo.class).setParameter("id", id).getResultList();
+                return em.createQuery("select p from Photo p where p.album.id = :id", Photo.class).setParameter("id", id).getResultList();
     }
 
 
     public Photo findOneByAlbumIdAndNum(Long albumId, int num) {
         return em.createQuery(
-                "select p from Photo p where p.album.albumId = :albumId AND p.num = :num", Photo.class
+                "select p from Photo p where p.album.id = :albumId AND p.num = :num", Photo.class
         ).setParameter("albumId", albumId).setParameter("num", num).getResultList().stream().findFirst().orElse(null );
     }
 

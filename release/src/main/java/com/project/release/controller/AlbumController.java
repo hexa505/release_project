@@ -43,7 +43,7 @@ public class AlbumController {
         List<TagResponse> tagResponseList = new ArrayList<>();
         albumService.findAlbumsByUserName(userName).stream().map(album -> {
             detailAlbumList.add(toDto(album));
-            tagResponseList.addAll(toDto2(albumTagService.getTagsByAlbumId(album.getAlbumId())));
+            tagResponseList.addAll(toDto2(albumTagService.getTagsByAlbumId(album.getId())));
             return null;
         }).collect(Collectors.toList());
         return new AlbumTagResponse(detailAlbumList, tagResponseList);
@@ -61,7 +61,7 @@ public class AlbumController {
         List<Album> albums = albumService.findAlbumsByUserName(userName);
         List<SimpleAlbumDTO> simpleAlbumDTOS = albums.stream().map(album -> new SimpleAlbumDTO(album.getTitle(), album.getThumbnail())).collect(Collectors.toList());
         List<String> tagString = new ArrayList<>();
-        albums.stream().map(album -> tagString.addAll(tagService.tagToString(albumTagService.getTagsByAlbumId(album.getAlbumId())))).collect(Collectors.toList());
+        albums.stream().map(album -> tagString.addAll(tagService.tagToString(albumTagService.getTagsByAlbumId(album.getId())))).collect(Collectors.toList());
         return new AlbumListAndTagsDTO(simpleAlbumDTOS, tagString);
     }
 
@@ -76,7 +76,7 @@ public class AlbumController {
     public Result getAlbumTags(@PathVariable("userName") String userName) {
         List<Album> albums = albumService.findAlbumsByUserName(userName);
         List<String> tagString = new ArrayList<>();
-        albums.stream().map(album -> tagString.addAll(tagService.tagToString(albumTagService.getTagsByAlbumId(album.getAlbumId())))).collect(Collectors.toList());
+        albums.stream().map(album -> tagString.addAll(tagService.tagToString(albumTagService.getTagsByAlbumId(album.getId())))).collect(Collectors.toList());
         return new Result(tagString);
     }
 

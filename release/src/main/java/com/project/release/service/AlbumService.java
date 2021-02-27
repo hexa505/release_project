@@ -49,7 +49,7 @@ public class AlbumService {
                 .description(albumForm.getDescription()).build();
         albumRepository.save(album);
         albumTagService.saveTags(album, stringToTagSet(albumForm.getTagString()));
-        return album.getAlbumId();
+        return album.getId();
     }
 
     // tags 스트링을 쪼개 주기..
