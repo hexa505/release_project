@@ -34,8 +34,6 @@ public class Album extends BaseTimeEntity {
 
     private String title;
 
-    private String userName;
-
     private Long version;
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL,  orphanRemoval = true)
@@ -57,6 +55,5 @@ public class Album extends BaseTimeEntity {
         this.description = description;
         this.title = title;
     }
-
 
 }

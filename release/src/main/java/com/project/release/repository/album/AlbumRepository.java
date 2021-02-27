@@ -43,7 +43,7 @@ public class AlbumRepository {
     }
 
     public List<Album> findByUserName(String userName) {
-        return em.createQuery("select a from Album a where a.userName = :userName", Album.class).setParameter("userName", userName).getResultList();
+        return em.createQuery("select a from Album a where a.user.name = :userName", Album.class).setParameter("userName", userName).getResultList();
     }
 
     public void deleteAlbumById(Long albumId) {
