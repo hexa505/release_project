@@ -179,8 +179,6 @@ public class AlbumController {
     @DeleteMapping("/api/v1/{userName}/album/{albumId}")
     public void deleteAlbum(@PathVariable("userName") String userName,
                             @PathVariable("albumId") Long albumId) {
-        photoService.deletePhotosByAlbumId(albumId);
-        albumTagService.deleteAlbumTagsByAlbumId(albumId);
         albumService.deleteAlbum(albumId);
     }
 

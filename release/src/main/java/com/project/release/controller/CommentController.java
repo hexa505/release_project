@@ -12,11 +12,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentController {
 
-    private CommentService commentService;
+    private final CommentService commentService;
 
     @PostMapping("/comment/{albumId}")
     public void 댓글등록(@PathVariable("albumId") Long albumId, @RequestBody CommentDTO request) {
-        commentService.saveComment(request);
+        try {
+            commentService.saveComment(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @GetMapping("/comment/{albumId}")

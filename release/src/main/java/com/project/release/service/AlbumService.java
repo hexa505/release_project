@@ -5,6 +5,7 @@ import com.project.release.controller.AlbumRequestDTO;
 import com.project.release.domain.album.Album;
 import com.project.release.domain.user.User;
 import com.project.release.repository.album.AlbumRepository;
+import com.project.release.repository.album.AlbumRepositoryInter;
 import com.project.release.repository.album.query.AlbumQueryDTO;
 import com.project.release.repository.album.query.AlbumQueryRepository;
 import com.project.release.repository.album.query2.AlbumQueryRepository2;
@@ -149,6 +150,7 @@ public class AlbumService {
 
     @Transactional
     public void deleteAlbum(Long albumId) {
+        albumRepository.findOne(albumId).deleteAlbum();
         albumRepository.deleteAlbumById(albumId);
     }
 

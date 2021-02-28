@@ -48,7 +48,6 @@ public class AlbumRepository {
     }
 
     public void deleteAlbumById(Long albumId) {
-      //  em.createQuery("delete from Album a where a.albumId = :albumId").setParameter("albumId", albumId);
         em.remove(findOne(albumId));
     }
 

@@ -59,4 +59,10 @@ public class Album extends BaseTimeEntity {
         this.title = title;
     }
 
+    public void deleteAlbum() {
+        this.photoList.stream().forEach(photo -> photo = null);
+        this.albumTags.stream().forEach(albumTag -> albumTag=null);
+    }
+
+
 }
