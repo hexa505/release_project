@@ -20,7 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable() // iframe 관련..? 잘 모르겠음
                 .and()
                     .authorizeRequests()
-                    .antMatchers( "/upload/**", "/members/**", "/", "/login", "/h2-console/**").permitAll() // 이 경로는 모두 허용
+                    .antMatchers( "/upload/**", "/members/**", "/", "/login", "/h2-console/**", "/**").permitAll() // 이 경로는 모두 허용
                     .anyRequest().authenticated() // 나머지는 authenticated된 사람만
                 .and()
                     .logout()
