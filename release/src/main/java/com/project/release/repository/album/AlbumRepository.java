@@ -4,6 +4,7 @@ import com.project.release.domain.album.Album;
 import com.project.release.domain.album.AlbumTag;
 import com.project.release.domain.album.Photo;
 import com.project.release.domain.album.Tag;
+import com.project.release.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -52,5 +53,10 @@ public class AlbumRepository {
     }
 
 
-
+    public Album findById(Long id) {
+        return em.createQuery("select a from Album a where a.id = :id", Album.class)
+                .setParameter("id", id)
+                .getResultList()
+                .stream().findFirst().orElse(null);
+    }
 }

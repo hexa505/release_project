@@ -34,7 +34,7 @@ public class AlbumQueryRepository2 {
                 " select new com.project.release.repository.album.query2.AlbumQueryDTO(a.id, a.user.id, a.thumbnail, a.description, a.title, a.user.name) " +
                         " from Album a " +
                         " where a.id = :albumId", AlbumQueryDTO.class
-        ).setParameter("albumId", albumId).getResultList().get(0); //이래도되나ㄱ-
+        ).setParameter("albumId", albumId).getResultList().stream().findFirst().orElse(null); //이래도되나ㄱ-
     }
 
 

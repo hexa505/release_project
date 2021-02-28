@@ -36,11 +36,14 @@ public class Album extends BaseTimeEntity {
 
     private Long version;
 
-    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL,  orphanRemoval = true)
+    @OneToMany(mappedBy = "album", fetch = FetchType.LAZY, cascade = CascadeType.ALL,  orphanRemoval = true)
     private List<AlbumTag> albumTags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL,  orphanRemoval = true)
+    @OneToMany(mappedBy = "album", fetch = FetchType.LAZY, cascade = CascadeType.ALL,  orphanRemoval = true)
     private List<Photo> photoList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "album", fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     public Album(String thumbnail, String description, String title, User user) {

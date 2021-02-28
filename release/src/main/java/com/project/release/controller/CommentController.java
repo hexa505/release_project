@@ -1,0 +1,31 @@
+package com.project.release.controller;
+
+import com.project.release.service.CommentService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Slf4j
+@RestController
+@RequiredArgsConstructor
+public class CommentController {
+
+    private CommentService commentService;
+
+    @PostMapping("/comment/{albumId}")
+    public void 댓글등록(@PathVariable("albumId") Long albumId, @RequestBody CommentDTO request) {
+        commentService.saveComment(request);
+    }
+
+    @GetMapping("/comment/{albumId}")
+    public List<CommentDTO> 댓글조회(@PathVariable("albumId") Long albumId) {
+        return commentService.findCommentDTOsByAlbumId(albumId);
+    }
+
+    @DeleteMapping("/comment/{albumId}/{commentId}")
+    public void 댓글삭제(@PathVariable("commentId") Long commentId) {
+        commentService.deleteCommentById(commentId);
+    }
+}

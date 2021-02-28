@@ -1,48 +1,60 @@
 package com.project.release.domain.album;
 
+import com.project.release.domain.BaseTimeEntity;
 import com.project.release.domain.user.User;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
-import static javax.persistence.FetchType.LAZY;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
-public class Comment {
+@NoArgsConstructor
+public class Comment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
     private Long id;
-    //예약어 조심 ~
-    private Long orders;
-
-    private String content;
-
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "album_id")
-    private Album album;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-    
-    @OneToOne
-    @JoinColumn(name = "comment_id")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "album_id")
+    private Album album;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
     private Comment parent;
 
-    @OneToOne(mappedBy = "parent")
-    private Comment child;
+    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+    private List<Comment> children = new ArrayList<>();
 
-    @Column(name = "create_date")
-    private LocalDateTime createDate;
+    private String content;
 
     // char(1)는
     // 데이터 정합성맞추려면 validation어쩌고어쩌고,, 해서 enum으로 넣음
     @Enumerated(EnumType.STRING)
     @Column(name = "is_deleted")
     private Check isDeleted; // Y/N
+
+    @Builder
+    public Comment(User user, Album album, Comment parent, String content, Check isDeleted) {
+        this.user = user;
+        this.album = album;
+        this.parent = parent;
+        this.content = content;
+        this.isDeleted = isDeleted;
+    }
+
+    public void changeDeletedStatus(Check check) {
+        this.isDeleted = check;
+    }
 }
