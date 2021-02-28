@@ -2,6 +2,7 @@ package com.project.release.controller;
 
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.MetadataException;
+import com.project.release.domain.SimpleUserDTO;
 import com.project.release.domain.user.*;
 import com.project.release.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class MemberController {
     /*
     로그인
      */
-    @GetMapping("/members")
+    @GetMapping("/login/callback")
     public String checkRegistered(HttpServletResponse response, Principal principal) {
         User user = userService.findByCode(Long.parseLong(principal.getName()));
         //User user = userService.findByCode(testCode);
@@ -69,6 +70,14 @@ public class MemberController {
     /*
     현재 사용자 조회
      */
+    @GetMapping("/members")
+    public SimpleUserDTO getCurrentUser() {
+        SessionUser requestUser = (SessionUser)httpSession.getAttribute("user");
+        if(requestUser == null) return null;
+
+        User user = userService.findById(requestUser.getId());
+        return new SimpleUserDTO(user, resourcesUriPath);
+    }
 
     /*
     회원 조회
@@ -76,8 +85,7 @@ public class MemberController {
     @GetMapping("/members/{username}")
     public UserResponseDTO showUser(@PathVariable("username") String username) {
         User user = userService.findByName(username);
-        UserResponseDTO response = new UserResponseDTO(user, resourcesUriPath);
-        return response;
+        return new UserResponseDTO(user, resourcesUriPath);
     }
 
     /*
@@ -91,7 +99,6 @@ public class MemberController {
             httpSession.setAttribute("user", new SessionUser(user));
         }
 
-        return;
     }
 
     // 회원 탈퇴 
