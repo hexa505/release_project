@@ -37,6 +37,7 @@ public class AlbumQueryRepository2 {
         ).setParameter("albumId", albumId).getResultList().get(0); //이래도되나ㄱ-
     }
 
+
     public AlbumQueryDTO findByAlbumId(Long albumId) {
         AlbumQueryDTO albumQueryDTO = findOne(albumId);
         albumQueryDTO.setPhotoList(getSimplePhotoDTO(albumId));
