@@ -97,7 +97,7 @@ public class AlbumResponseDTO {
         private List<TagResponse> tagResponseList;
 
         public static Response of(Album album, List<Photo> photoList, List<Tag> tag) {
-            System.out.println("album.getAlbumId() = " + album.getAlbumId());
+            System.out.println("album.getAlbumId() = " + album.getId());
             Response response = new Response();
             response.detailAlbum = toDto(album);
             response.detailPhotoList = toDto(photoList);

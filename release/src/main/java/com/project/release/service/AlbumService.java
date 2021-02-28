@@ -41,13 +41,13 @@ public class AlbumService {
 
         //userName으로 유저 엔티티 찾아서 유저 인스턴스 넣는 걸로 바꿀 것
         AlbumRequestDTO.AlbumForm albumForm = form.getAlbumForm();
-        Album album = Album.builder().userName(userName)
+        Album album = Album.builder().user(null)
                 .thumbnail(albumForm.getPhoto().getOriginalFilename())
                 .title(albumForm.getTitle())
                 .description(albumForm.getDescription()).build();
         albumRepository.save(album);
         albumTagService.saveTags(album, stringToTagSet(albumForm.getTagString()));
-        return album.getAlbumId();
+        return album.getId();
     }
 
     // tags 스트링을 쪼개 주기..

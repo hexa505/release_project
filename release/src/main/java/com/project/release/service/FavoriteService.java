@@ -3,6 +3,7 @@ package com.project.release.service;
 import com.project.release.domain.album.Album;
 import com.project.release.domain.album.Favorite;
 import com.project.release.domain.user.User;
+import com.project.release.repository.album.AlbumRepository;
 import com.project.release.repository.album.AlbumRepositoryInter;
 import com.project.release.repository.FavoriteRepository;
 import com.project.release.repository.UserRepository;
@@ -17,7 +18,7 @@ public class FavoriteService {
 
     private final FavoriteRepository favoriteRepository;
     private final UserRepository userRepository;
-    private final AlbumRepositoryInter albumRepositoryInter;
+    private final AlbumRepositoryInter albumRepository;
 
     // 좋아요 여부 체크
     public boolean checkFavorite(Long albumId, Long userId) {
@@ -29,7 +30,7 @@ public class FavoriteService {
     public void addFavorite(Long albumId, Long userId) {
         if(checkFavorite(albumId, userId)) return;
 
-        Album album = albumRepositoryInter.findById(albumId)
+        Album album = albumRepository.findById(albumId)
                 .stream().findFirst()
                 .orElse(null);
         User user = userRepository.findById(userId);

@@ -33,8 +33,6 @@ public class Photo {
     @Column(length = 300)
     private String description;
 
-    @OneToMany(mappedBy = "photo")
-    private List<Comment> comments = new ArrayList<>();
     //연관관계 매핑
     public void setAlbum(Album album) {
         this.album = album;
