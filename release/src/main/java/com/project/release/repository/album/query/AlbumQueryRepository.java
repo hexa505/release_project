@@ -16,7 +16,7 @@ public class AlbumQueryRepository {
 
     public List<AlbumQueryDTO> findByUserName(String userName) {
         return em.createQuery(
-                "select new com.project.release.repositoriy.album.query.AlbumQueryDTO(a.albumId, a.userId, a.thumbnail, a.description, a.title, a.userName) " +
+                "select new com.project.release.repositoriy.album.query.AlbumQueryDTO(a.id, a.userId, a.thumbnail, a.description, a.title, a.userName) " +
                         " from Album a" +
                         " where a.userName = :userName", AlbumQueryDTO.class
         ).setParameter("userName", userName).getResultList();
@@ -38,10 +38,10 @@ public class AlbumQueryRepository {
     private Map<Long, List<PhotoDTO>> findPhotoMap(List<Long> albumIds) {
 
         List<PhotoDTO> photos = em.createQuery(
-                "select new com.project.release.repositoriy.album.query.PhotoDTO(p.photoId, a.albumId, p.num, p.pic, p.title, p.description)" +
+                "select new com.project.release.repositoriy.album.query.PhotoDTO(p.id, a.id, p.num, p.pic, p.title, p.description)" +
                         " from Album a " +
                         " join a.photoList p" +
-                        " where a.albumId in :albumIds", PhotoDTO.class
+                        " where a.id in :albumIds", PhotoDTO.class
         ).setParameter("albumIds", albumIds).getResultList();
 
         Map<Long, List<PhotoDTO>> photoDTOMap = photos.stream().collect(Collectors.groupingBy(PhotoDTO::getAlbumId));
@@ -51,9 +51,9 @@ public class AlbumQueryRepository {
 
     public Map<Long, List<TagDTO>> findTagmap(List<Long> albumIds){
         List<TagDTO> tags = em.createQuery(
-                "select new com.project.release.repositoriy.album.query.TagDTO(at.album.albumId, t.tagName) from AlbumTag at" +
+                "select new com.project.release.repositoriy.album.query.TagDTO(at.album.id, t.tagName) from AlbumTag at" +
                         " join at.tag t " +
-                        " where at.album.albumId in :albumIds", TagDTO.class
+                        " where at.album.id in :albumIds", TagDTO.class
         ).setParameter("albumIds", albumIds).getResultList();
 
         Map<Long, List<TagDTO>> tagDTOMap = tags.stream().collect(Collectors.groupingBy(TagDTO::getAlbumId));

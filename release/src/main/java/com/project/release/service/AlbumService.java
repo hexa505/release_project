@@ -3,6 +3,7 @@ package com.project.release.service;
 
 import com.project.release.controller.AlbumRequestDTO;
 import com.project.release.domain.album.Album;
+import com.project.release.domain.user.User;
 import com.project.release.repository.album.AlbumRepository;
 import com.project.release.repository.album.query.AlbumQueryDTO;
 import com.project.release.repository.album.query.AlbumQueryRepository;
@@ -37,11 +38,12 @@ public class AlbumService {
     private final  PhotoService photoService; // 이거 나중에 어케 처리하기.............
 
     @Transactional
-    public Long createAlbum(AlbumRequestDTO form, String userName) {
+    public Long createAlbum(AlbumRequestDTO form, User user) {
 
         //userName으로 유저 엔티티 찾아서 유저 인스턴스 넣는 걸로 바꿀 것
         AlbumRequestDTO.AlbumForm albumForm = form.getAlbumForm();
-        Album album = Album.builder().user(null)
+        Album album = Album.builder()
+                .user(user)
                 .thumbnail(albumForm.getPhoto().getOriginalFilename())
                 .title(albumForm.getTitle())
                 .description(albumForm.getDescription()).build();
@@ -105,15 +107,17 @@ public class AlbumService {
     }
 
     @Transactional
-    public void createAlbumAndPhoto(String userName, AlbumRequestDTO request) throws IOException {
-        saveFile(request.getAlbumForm().getPhoto(), resourcesLocation + "/" + userName + "/album");
+    public void createAlbumAndPhoto(User user, AlbumRequestDTO request) throws IOException {
+
+
+        saveFile(request.getAlbumForm().getPhoto(), resourcesLocation + "/" + user.getName() + "/album");
         //1. 앨범 폼 받기
-        Long albumId = createAlbum(request, userName);
+        Long albumId = createAlbum(request, user);
         request.getPhotoFormList().forEach(photoRequest -> {
             //2. 포토 리스트 받기..
             photoService.savePhoto(photoRequest, albumId, request.getPhotoFormList().indexOf(photoRequest));
             try {
-                saveFile(photoRequest.getPhoto(), resourcesLocation + "/" + userName + "/album");
+                saveFile(photoRequest.getPhoto(), resourcesLocation + "/" + user.getName() + "/album");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -139,7 +143,7 @@ public class AlbumService {
     }
 
     public com.project.release.repository.album.query2.AlbumQueryDTO findByAlbumIdQuery(Long albumId) {
-        return albumQueryRepository2.findByalbumId(albumId);
+        return albumQueryRepository2.findByAlbumId(albumId);
     }
 
 

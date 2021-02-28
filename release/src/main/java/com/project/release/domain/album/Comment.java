@@ -16,8 +16,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
-    private Long commentId;
-
+    private Long id;
     //예약어 조심 ~
     private Long orders;
 

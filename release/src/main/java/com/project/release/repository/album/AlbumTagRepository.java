@@ -20,13 +20,13 @@ public class AlbumTagRepository {
     }
 
     public List<Tag> getTagsByAlbumId(Long albumId){
-        return em.createQuery("select t from AlbumTag alt join fetch Tag t on alt.tag.tagId = t.tagId where alt.album.albumId = :albumId", Tag.class).setParameter("albumId", albumId).getResultList();
+        return em.createQuery("select t from AlbumTag alt join fetch Tag t on alt.tag.id = t.id where alt.album.id = :albumId", Tag.class).setParameter("albumId", albumId).getResultList();
     }
 
     public List<AlbumTag> findByAlbumId(Long albumId) {
         return em.createQuery(
                 "select at from AlbumTag at" +
-                        " where at.album.albumId = :albumId", AlbumTag.class
+                        " where at.album.id = :albumId", AlbumTag.class
         ).setParameter("albumId", albumId).getResultList();
     }
 

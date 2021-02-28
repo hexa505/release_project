@@ -3,11 +3,10 @@ package com.project.release.controller;
 
 import com.project.release.domain.album.Album;
 import com.project.release.domain.album.Photo;
+import com.project.release.domain.user.User;
+import com.project.release.repository.UserRepository;
 import com.project.release.repository.album.query.AlbumQueryDTO;
-import com.project.release.service.AlbumService;
-import com.project.release.service.AlbumTagService;
-import com.project.release.service.PhotoService;
-import com.project.release.service.TagService;
+import com.project.release.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +29,7 @@ public class AlbumController {
     private final PhotoService photoService;
     private final TagService tagService;
     private final AlbumTagService albumTagService;
+    private final UserService userService;
 
     /**
      * 사용자의 앨범리스트, 태그조회 V1 -DetailAlbumDTO, tag를 List<TagResponse>로 감싸서 보냄
@@ -91,7 +91,8 @@ public class AlbumController {
     @PostMapping("/{userName}/album")
     public void publishAlbum(@PathVariable("userName") String userName,
                              @ModelAttribute AlbumRequestDTO request) throws IOException {
-        albumService.createAlbumAndPhoto(userName, request);
+        User user = userService.findByName(userName);
+        albumService.createAlbumAndPhoto(user, request);
         // 뷰 라우터에서 다시 앨범 열람 페이지로 넘어갈것.
     }
 

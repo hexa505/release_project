@@ -24,12 +24,7 @@ public class TagService {
         if (tagRepository.findByName(tagName).isEmpty()) {
             Tag tag = Tag.builder().tagName(tagName).build();
             return tagRepository.save(tag);
-        } else return tagRepository.findByName(tagName).get(0).getTagId();
-    }
-
-    //앨범아이디로 태그 리스트조회하기
-    public List<Tag> findByAlbumId(Long albumId) {
-        return tagRepository.findByAlbumId(albumId);
+        } else return tagRepository.findByName(tagName).stream().findFirst().orElse(null ).getId();
     }
 
 
