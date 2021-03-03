@@ -5,7 +5,6 @@ import com.project.release.controller.AlbumRequestDTO;
 import com.project.release.domain.album.Album;
 import com.project.release.domain.user.User;
 import com.project.release.repository.album.AlbumRepository;
-import com.project.release.repository.album.AlbumRepositoryInter;
 import com.project.release.repository.album.query.AlbumQueryDTO;
 import com.project.release.repository.album.query.AlbumQueryRepository;
 import com.project.release.repository.album.query2.AlbumQueryRepository2;
@@ -128,15 +127,17 @@ public class AlbumService {
 
     //유저name으로 앨범 리스트 조회
     public List<Album> findAlbumsByUserName(String userName) {
-        return albumRepository.findByUserName(userName);
+        return albumRepository.findAlbumsByUser_Name(userName);
     }
 
     public List<Album> findAlbumsByAlbumTitle(String title) {
-        return albumRepository.findByAlbumTitle(title);
+        return albumRepository.findAlbumsByTitle(title);
     }
 
     public Album findOneById(Long id) {
-        return albumRepository.findOne(id);
+        return albumRepository.findById(id)
+                .stream().findFirst()
+                .orElse(null);
     }
 
     public List<AlbumQueryDTO> findByUserNameQuery(String userName) {
@@ -150,7 +151,8 @@ public class AlbumService {
 
     @Transactional
     public void deleteAlbum(Long albumId) {
-        albumRepository.findOne(albumId).deleteAlbum();
+        albumRepository.findById(albumId).stream().findFirst()
+                .orElse(null).deleteAlbum();
         albumRepository.deleteAlbumById(albumId);
     }
 

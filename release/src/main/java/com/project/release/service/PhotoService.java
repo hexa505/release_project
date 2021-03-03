@@ -22,7 +22,8 @@ public class PhotoService {
 
     @Transactional
     public Long savePhoto(AlbumRequestDTO.PhotoForm photoForm, Long albumId, int index) {
-        Album album = albumRepository.findOne(albumId);
+        Album album = albumRepository.findById(albumId).stream().findFirst()
+                .orElse(null);
         Photo photo = Photo.builder()
                 .album(album)
                 .pic(photoForm.getPhoto().getOriginalFilename())

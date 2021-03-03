@@ -31,7 +31,8 @@ public class CommentService {
     public void saveComment(CommentDTO request) throws Exception{
 
         User user = userRepository.findById(request.getUserId());
-        Album album = albumRepository.findById(request.getAlbumId());
+        Album album = albumRepository.findById(request.getAlbumId()).stream().findFirst()
+                .orElse(null);
         Comment comment = Comment.builder()
                 .user(user)
                 .album(album)
