@@ -8,8 +8,10 @@ import com.project.release.repository.album.AlbumRepository;
 import com.project.release.repository.album.query.AlbumQueryDTO;
 import com.project.release.repository.album.query.AlbumQueryRepository;
 import com.project.release.repository.album.query2.AlbumQueryRepository2;
+import com.project.release.service.event.AlbumEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -36,6 +38,8 @@ public class AlbumService {
     private final AlbumQueryRepository albumQueryRepository;
     private final AlbumQueryRepository2 albumQueryRepository2;
     private final  PhotoService photoService; // 이거 나중에 어케 처리하기.............
+    private final ApplicationEventPublisher eventPublisher;
+
 
     @Transactional
     public Long createAlbum(AlbumRequestDTO form, User user) {
@@ -83,6 +87,7 @@ public class AlbumService {
         Album album = findOneById(albumId);
         album.updateAlbum(request.getPhoto().getOriginalFilename(), request.getDescription(), request.getTitle());
         saveAlbum(album);
+        eventPublisher.publishEvent(new AlbumEvent.AlbumUpdatedEvent(album));
     }
 
 

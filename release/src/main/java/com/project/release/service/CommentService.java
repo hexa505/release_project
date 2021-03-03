@@ -8,7 +8,9 @@ import com.project.release.domain.user.User;
 import com.project.release.repository.UserRepository;
 import com.project.release.repository.album.AlbumRepository;
 import com.project.release.repository.album.CommentRepository;
+import com.project.release.service.event.AlbumEvent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final AlbumRepository albumRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     // 코멘트 등록
     @Transactional
@@ -42,6 +45,7 @@ public class CommentService {
                 .build();
 
         commentRepository.save(comment);
+        eventPublisher.publishEvent(new AlbumEvent.CommentCreatedEvent(album, comment));
     }
 
     @Transactional
