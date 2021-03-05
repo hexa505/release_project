@@ -3,13 +3,12 @@ package com.project.release.service;
 import com.project.release.domain.album.Album;
 import com.project.release.domain.album.AlbumTag;
 import com.project.release.domain.album.Tag;
-import com.project.release.repository.album.AlbumTagRepository;
+import com.project.release.repository.album.AlbumTagRepositoryInter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -17,33 +16,25 @@ import java.util.Set;
 public class AlbumTagService {
 
     private final TagService tagService;
-    private final AlbumTagRepository albumTagRepository;
+    private final AlbumTagRepositoryInter albumTagRepository;
 
     @Transactional
-    public void saveTags(Album album, Set<String> hashtags) {
+    public void saveTags(Album album, List<String> tags) {
 
-        // 앨범에 추가
-        // 태그별로 앨범과 해쉬테그 정보를 추가해야댐...
-        //태그 저장 -> 태그 서비스 이용
-        hashtags.forEach(hashtag -> {
+        tags.forEach(t -> {
                     AlbumTag albumTag = new AlbumTag();
-                    albumTag.setAlbum(album); // 앨범에 추가하고
-                    Tag tag = tagService.findOne(tagService.findOrCreateTag(hashtag)); //Tag repository에 저장된 태그의 아이디를 받아서?? 아님 엔티티받는 걸로 바꿀까.. 하여간
-                    albumTag.setTag(tag); //연결테이블에 태그 추가하기....
-                   albumTagRepository.save(albumTag);
+                    albumTag.setAlbum(album);
+                    Tag tag = tagService.findOne(tagService.findOrSaveTag(t));
+                     albumTag.setTag(tag);
+                    albumTagRepository.save(albumTag);
                 }
         );
 
     }
 
     @Transactional
-    public List<Tag> getTagsByAlbumId(Long albumId) {
-        return albumTagRepository.getTagsByAlbumId(albumId);
-    }
-
-    @Transactional
-    public void deleteAlbumTagsByAlbumId(Long albumId) {
-        albumTagRepository.deleteAlbumTagsByAlbumId(albumId);
+    public List<Tag> findTagsByAlbumId(Long albumId) {
+        return albumTagRepository.findTagsByAlbumId(albumId);
     }
 
 

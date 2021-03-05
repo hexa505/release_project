@@ -12,8 +12,6 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
 
     public List<Album> findAlbumsByUser_Name(String name);
 
-    public List<Album> findAlbumsByTitle(String title);
-
     public void deleteAlbumById(Long id);
 
 }

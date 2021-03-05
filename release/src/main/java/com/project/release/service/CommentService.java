@@ -34,8 +34,7 @@ public class CommentService {
     public void saveComment(CommentDTO request) throws Exception{
 
         User user = userRepository.findById(request.getUserId());
-        Album album = albumRepository.findById(request.getAlbumId()).stream().findFirst()
-                .orElse(null);
+        Album album = albumRepository.findById(request.getAlbumId()).get();
         Comment comment = Comment.builder()
                 .user(user)
                 .album(album)
@@ -60,12 +59,11 @@ public class CommentService {
     }
 
     @Transactional
-    public Comment getDeletableAncestorComment(Comment comment) { // 삭제 가능한 조상 댓글을 구함
-        Comment parent = comment.getParent(); // 현재 댓글의 부모를 구함
+    public Comment getDeletableAncestorComment(Comment comment) {
+        Comment parent = comment.getParent();
         if (parent != null && parent.getChildren().size() == 1 && parent.getIsDeleted() == Check.Y)
-            // 부모가 있고, 부모의 자식이 1개(지금 삭제하는 댓글)이고, 부모의 삭제 상태가 TRUE인 댓글이라면 재귀
             return getDeletableAncestorComment(parent);
-        return comment; // 삭제해야하는 댓글 반환
+        return comment;
     }
 
 
@@ -89,8 +87,6 @@ public class CommentService {
         return result;
     }
 
-
-    // id가 0인 코멘트 아이디 넣어줘야하나.....
     public static CommentDTO toDto(Comment c) throws Exception{
 
         if (c.getParent() == null) {

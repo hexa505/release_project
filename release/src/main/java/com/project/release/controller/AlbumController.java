@@ -4,8 +4,6 @@ package com.project.release.controller;
 import com.project.release.domain.album.Album;
 import com.project.release.domain.album.Photo;
 import com.project.release.domain.user.User;
-import com.project.release.repository.UserRepository;
-import com.project.release.repository.album.query.AlbumQueryDTO;
 import com.project.release.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,7 +42,7 @@ public class AlbumController {
         List<TagResponse> tagResponseList = new ArrayList<>();
         albumService.findAlbumsByUserName(userName).stream().map(album -> {
             detailAlbumList.add(toDto(album));
-            tagResponseList.addAll(toDto2(albumTagService.getTagsByAlbumId(album.getId())));
+            tagResponseList.addAll(toDto2(albumTagService.findTagsByAlbumId(album.getId())));
             return null;
         }).collect(Collectors.toList());
         return new AlbumTagResponse(detailAlbumList, tagResponseList);
@@ -61,7 +60,7 @@ public class AlbumController {
         List<Album> albums = albumService.findAlbumsByUserName(userName);
         List<SimpleAlbumDTO> simpleAlbumDTOS = albums.stream().map(album -> new SimpleAlbumDTO(album.getTitle(), album.getThumbnail())).collect(Collectors.toList());
         List<String> tagString = new ArrayList<>();
-        albums.stream().map(album -> tagString.addAll(tagService.tagToString(albumTagService.getTagsByAlbumId(album.getId())))).collect(Collectors.toList());
+        albums.stream().map(album -> tagString.addAll(tagService.tagToString(albumTagService.findTagsByAlbumId(album.getId())))).collect(Collectors.toList());
         return new AlbumListAndTagsDTO(simpleAlbumDTOS, tagString);
     }
 
@@ -76,22 +75,23 @@ public class AlbumController {
     public Result getAlbumTags(@PathVariable("userName") String userName) {
         List<Album> albums = albumService.findAlbumsByUserName(userName);
         List<String> tagString = new ArrayList<>();
-        albums.stream().map(album -> tagString.addAll(tagService.tagToString(albumTagService.getTagsByAlbumId(album.getId())))).collect(Collectors.toList());
+        albums.stream().map(album -> tagString.addAll(tagService.tagToString(albumTagService.findTagsByAlbumId(album.getId())))).collect(Collectors.toList());
         return new Result(tagString);
     }
 
 
     /**
-     * 앨범 작성
      *
-     * @param userName
      * @param request
+     * @param principal
      * @throws IOException
      */
     @PostMapping("/{userName}/album")
-    public void publishAlbum(@PathVariable("userName") String userName,
-                             @ModelAttribute AlbumRequestDTO request) throws IOException {
-        User user = userService.findByName(userName);
+    public void publishAlbum(@ModelAttribute AlbumRequestDTO request,
+                             Principal principal) throws IOException {
+        //유저 세션 확인
+      //  User user = userService.findByCode(Long.parseLong(principal.getName()));
+        User user = userService.findByCode(65801603L);
         albumService.createAlbumAndPhoto(user, request);
         // 뷰 라우터에서 다시 앨범 열람 페이지로 넘어갈것.
     }
@@ -112,7 +112,7 @@ public class AlbumController {
     public Response showAlbum(Long albumId) {
         Album album = albumService.findOneById(albumId);
         List<Photo> photoList = photoService.findPhotosByAlbumId(albumId);
-        Response response = Response.of(album, photoList, albumTagService.getTagsByAlbumId(albumId));
+        Response response = Response.of(album, photoList, albumTagService.findTagsByAlbumId(albumId));
         return response;
     }
 
@@ -123,8 +123,8 @@ public class AlbumController {
      * @return
      */
     @GetMapping("/api/v3/{userName}/album/{albumId}")
-    public com.project.release.repository.album.query2.AlbumQueryDTO showAlbumV3(@PathVariable("userName") String userName,
-                                                                                 @PathVariable("albumId") Long albumId) {
+    public com.project.release.repository.album.query.AlbumQueryDTO showAlbumV3(@PathVariable("userName") String userName,
+                                                                                @PathVariable("albumId") Long albumId) {
         return albumService.findByAlbumIdQuery(albumId);
     }
 
@@ -149,7 +149,7 @@ public class AlbumController {
      */
     @GetMapping("/api/v1/{userName}/album/{albumId}/{photoId}")
     public DetailPhoto getOnePhoto(@PathVariable("photoId") Long photoId) {
-       Photo photo =  photoService.finOne(photoId);
+       Photo photo =  photoService.findById(photoId);
        return toDto(photo);
     }
 
@@ -174,27 +174,13 @@ public class AlbumController {
      *
      * @param userName
      * @param albumId
+     * 삭제 할 때 이미지 파일들은 어떻게 처리해주지?
      */
-    // TODO : 삭제 쿼리 고치기.. 쿼리가 너무 많이 나옴
     @DeleteMapping("/api/v1/{userName}/album/{albumId}")
     public void deleteAlbum(@PathVariable("userName") String userName,
                             @PathVariable("albumId") Long albumId) {
         albumService.deleteAlbum(albumId);
     }
 
-
-
-    /**
-     * 잘못만들었는데 지우기 아까워서 냅둠 1
-     *
-     * @param userName
-     * @param albumId
-     * @return
-     */
-    @GetMapping("/api/v2/{userName}/album/{albumId}")
-    public List<AlbumQueryDTO> showAlbumV2(@PathVariable("userName") String userName,
-                                           @PathVariable("albumId") Long albumId) {
-        return albumService.findByUserNameQuery(userName);
-    }
 
 }

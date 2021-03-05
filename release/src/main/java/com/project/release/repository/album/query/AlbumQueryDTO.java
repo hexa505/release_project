@@ -15,7 +15,7 @@ public class AlbumQueryDTO {
     private String title;
     private String userName;
     private List<TagDTO> albumTags = new ArrayList<>();
-    private List<PhotoDTO> photoList = new ArrayList<>();
+    private List<SimplePhotoDTO> photoList = new ArrayList<>();
 
     public AlbumQueryDTO(Long albumId, Long userId, String thumbnail, String description, String title, String userName) {
         this.albumId = albumId;
