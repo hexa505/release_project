@@ -36,6 +36,16 @@ public interface AlbumRepositoryInter extends JpaRepository<Album, Long> {
             + "order by fc desc, a.id desc")
     public List<Album> findByFavoriteFirstPage(@Param("dateTime") LocalDateTime dateTime, Pageable page);
 
+    @Query("select a from Album a "
+            + "join fetch a.user user "
+            + "left join a.favoriteList f "
+            + "where a.modifiedDate > :dateTime and "
+            + "(f.size < :favCount or "
+            + "f.size = :favCount and a.id < :albumId) "
+            + "order by f.size desc, a.id desc")
+    public List<Album> findByFavoriteNextPage(@Param("dateTime") LocalDateTime dateTime, @Param("favCount") Integer favCount, @Param("albumId") Long albumId, Pageable page);
+
+    /*
     @Query("select a, count(f.id) as fc from Album a "
             + "join fetch a.user user "
             + "left join a.favoriteList f "
@@ -46,16 +56,8 @@ public interface AlbumRepositoryInter extends JpaRepository<Album, Long> {
     public List<Album> findByFavoriteNextPage(@Param("dateTime") LocalDateTime dateTime, @Param("favCount") Long favCount, @Param("albumId") Long albumId, Pageable page);
 
 
+     */
     /*
-    @Query("select a, count(f.id) as fc, from Album a "
-            + "join fetch a.user user "
-            + "left join a.favoriteList f "
-            + "where a.modifiedDate > :dateTime "
-            + "group by a.id "
-            + "having concat(function('lpad', count(f.id), 10, '0'), function('lpad', a.id, 10, '0')) "
-            + "< concat(function('lpad', :favCount, 10, '0'), function('lpad', :albumId, 10, '0')) "
-            + "order by fc desc, ")
-    public List<Album> findByFavoriteNextPage(@Param("dateTime") LocalDateTime dateTime, @Param("favCount") Long favCount, @Param("albumId") Long albumId, Pageable page);
 
 select
         album0_.album_id as col_0_0_,
@@ -86,8 +88,8 @@ select
     order by
         album0_.album_id desc
 
-
      */
+
     // 팔로잉의 앨범 리스트 조회 last modified 기준
 
 

@@ -23,7 +23,7 @@ public class HomeAlbumController {
      */
     @GetMapping("/popular")
     public AlbumListResult getPopularAlbums(@RequestParam(value = "cursorId", required = false) Long cursorId,
-                                            @RequestParam(value = "cursorCount", required = false) Long cursorCount) {
+                                            @RequestParam(value = "cursorCount", required = false) Integer cursorCount) {
         LocalDateTime dateWeekBefore = LocalDateTime.now().minusDays(7);
         return albumSearchService.getPopularAlbums(dateWeekBefore, cursorCount, cursorId, PageRequest.of(0, 4));
     }
