@@ -51,7 +51,9 @@ public class FavoriteService {
                 .orElse(null);
 
         if(favorite != null) {
-            favoriteRepository.delete(favorite);
+            //favoriteRepository.delete(favorite);
+            Album album = albumRepository.getOne(albumId);
+            album.getFavoriteList().remove(favorite);
         }
 
     }

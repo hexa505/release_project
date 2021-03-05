@@ -2,14 +2,18 @@ package com.project.release.service;
 
 
 import com.project.release.controller.AlbumRequestDTO;
+import com.project.release.domain.AlbumListDTO;
+import com.project.release.domain.AlbumListResult;
 import com.project.release.domain.album.Album;
 import com.project.release.domain.user.User;
 import com.project.release.repository.album.AlbumRepository;
+import com.project.release.repository.album.AlbumRepositoryInter;
 import com.project.release.repository.album.query.AlbumQueryDTO;
 import com.project.release.repository.album.query.AlbumQueryRepository;
 import com.project.release.repository.album.query2.AlbumQueryRepository2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -20,10 +24,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -35,6 +42,7 @@ public class AlbumService {
     private final AlbumTagService albumTagService;
     private final AlbumQueryRepository albumQueryRepository;
     private final AlbumQueryRepository2 albumQueryRepository2;
+    private final AlbumRepositoryInter albumRepositoryInter;
     private final  PhotoService photoService; // 이거 나중에 어케 처리하기.............
 
     @Transactional
@@ -128,6 +136,31 @@ public class AlbumService {
     //유저name으로 앨범 리스트 조회
     public List<Album> findAlbumsByUserName(String userName) {
         return albumRepository.findByUserName(userName);
+    }
+
+    /**
+     * 유저의 앨범 리스트 조회(페이지네이션 적용)
+     *
+     * @author Yena Kim
+     */
+    public AlbumListResult<AlbumListDTO, LocalDateTime> getUserAlbumList(Long userId, LocalDateTime cursorDateTime, Long cursorId, Pageable page) {
+        List<Album> albums;
+
+        if(cursorDateTime == null) {
+            albums = albumRepositoryInter.findByUserIdFirstPage(userId, page);
+        }
+        else {
+            albums = albumRepositoryInter.findByUserIdNextPage(userId, cursorDateTime, page);
+        }
+
+        Long lastId = albums.isEmpty() ? null : albums.get(albums.size() - 1).getId();
+        LocalDateTime lastDateTime = albums.isEmpty() ? null : albums.get(albums.size() - 1).getModifiedDate();
+        List<AlbumListDTO> albumList = albums.stream()
+                .map(a -> new AlbumListDTO(a, a.getUser(), resourcesLocation))
+                .collect(Collectors.toList());
+
+        return new AlbumListResult<>(albumList, lastId, lastDateTime);
+
     }
 
     public List<Album> findAlbumsByAlbumTitle(String title) {

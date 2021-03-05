@@ -1,6 +1,7 @@
 package com.project.release.controller;
 
 
+import com.project.release.domain.AlbumListResult;
 import com.project.release.domain.album.Album;
 import com.project.release.domain.album.Photo;
 import com.project.release.domain.user.User;
@@ -9,10 +10,13 @@ import com.project.release.repository.album.query.AlbumQueryDTO;
 import com.project.release.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,6 +69,20 @@ public class AlbumController {
         return new AlbumListAndTagsDTO(simpleAlbumDTOS, tagString);
     }
 
+    /**
+     * 사용자의 앨범리스트 조회(페이지네이션 적용)
+     *
+     * @author Yena Kim
+     * @return
+     */
+    @GetMapping("/api/v3/{username}/albums")
+    public AlbumListResult getAlbumList(@PathVariable("username") String username, @RequestParam(value = "cursorId", required = false) Long cursorId,
+                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                        @RequestParam(value = "cursorDateTime", required = false) LocalDateTime cursorDateTime) {
+
+        User user = userService.findByName(username);
+        return albumService.getUserAlbumList(user.getId(), cursorDateTime, cursorId, PageRequest.of(0, 4));
+    }
 
     /**
      * 태그 조회 - List<String> tag 반환

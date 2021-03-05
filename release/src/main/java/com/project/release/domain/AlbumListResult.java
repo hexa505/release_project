@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class BookmarkListResult<T1, T2> {
+public class AlbumListResult<T1, T2> {
 
     private List<T1> data;
     private Long lastId;

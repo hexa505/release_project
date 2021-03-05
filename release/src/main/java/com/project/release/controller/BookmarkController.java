@@ -1,6 +1,6 @@
 package com.project.release.controller;
 
-import com.project.release.domain.BookmarkListResult;
+import com.project.release.domain.AlbumListResult;
 import com.project.release.domain.user.SessionUser;
 import com.project.release.service.BookmarkService;
 import com.project.release.service.UserService;
@@ -75,12 +75,12 @@ public class BookmarkController {
     자신의 북마크 앨범 리스트 조회
      */
     @GetMapping("/bookmarks")
-    public BookmarkListResult getBookmarkList(@RequestParam(value = "cursorId", required = false) Long cursorId,
-                                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    public AlbumListResult getBookmarkList(@RequestParam(value = "cursorId", required = false) Long cursorId,
+                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                               @RequestParam(value = "cursorDateTime", required = false) LocalDateTime cursorDateTime) {
 
         SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
-        return bookmarkService.getBookmarkList(sessionUser.getId(), cursorId, cursorDateTime, PageRequest.of(0, 20));
+        return bookmarkService.getBookmarkList(sessionUser.getId(), cursorId, cursorDateTime, PageRequest.of(0, 4));
     }
 
     /*
