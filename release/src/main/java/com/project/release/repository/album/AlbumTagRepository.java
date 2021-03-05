@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AlbumTagRepositoryInter extends JpaRepository<AlbumTag, Long> {
+public interface AlbumTagRepository extends JpaRepository<AlbumTag, Long> {
 
     @Query("" +
             "select t from AlbumTag at " +

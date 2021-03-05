@@ -90,7 +90,8 @@ public class AlbumController {
     public void publishAlbum(@ModelAttribute AlbumRequestDTO request,
                              Principal principal) throws IOException {
         //유저 세션 확인
-      //  User user = userService.findByCode(Long.parseLong(principal.getName()));
+//        System.out.println("principal.getName()"+ principal.getName());
+  //      User user = userService.findByCode(Long.parseLong(principal.getName()));
         User user = userService.findByCode(65801603L);
         albumService.createAlbumAndPhoto(user, request);
         // 뷰 라우터에서 다시 앨범 열람 페이지로 넘어갈것.

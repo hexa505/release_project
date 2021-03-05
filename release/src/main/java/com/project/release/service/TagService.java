@@ -2,7 +2,7 @@ package com.project.release.service;
 
 
 import com.project.release.domain.album.Tag;
-import com.project.release.repository.album.TagRepositoryInter;
+import com.project.release.repository.album.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @Service
 public class TagService {
-    private final TagRepositoryInter tagRepository;
+    private final TagRepository tagRepository;
 
 
     //기존에 존재하는지 체크하여 없으면 생성하고 아이디 리턴

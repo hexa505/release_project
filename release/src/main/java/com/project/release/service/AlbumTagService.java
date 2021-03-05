@@ -3,7 +3,7 @@ package com.project.release.service;
 import com.project.release.domain.album.Album;
 import com.project.release.domain.album.AlbumTag;
 import com.project.release.domain.album.Tag;
-import com.project.release.repository.album.AlbumTagRepositoryInter;
+import com.project.release.repository.album.AlbumTagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,7 @@ import java.util.List;
 public class AlbumTagService {
 
     private final TagService tagService;
-    private final AlbumTagRepositoryInter albumTagRepository;
+    private final AlbumTagRepository albumTagRepository;
 
     @Transactional
     public void saveTags(Album album, List<String> tags) {
