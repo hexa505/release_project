@@ -13,8 +13,8 @@ import java.util.List;
 public interface AlbumTagRepository extends JpaRepository<AlbumTag, Long> {
 
     @Query("" +
-            "select t from AlbumTag at " +
-            "join fetch Tag t on at.tag.id = t.id" +
+            "select t from AlbumTag at" +
+            " join fetch Tag t on at.tag.id = t.id" +
             " where at.album.id = :id")
     public List<Tag> findTagsByAlbumId(@Param("id") Long id);
 

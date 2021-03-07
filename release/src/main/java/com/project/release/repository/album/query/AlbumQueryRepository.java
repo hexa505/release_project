@@ -34,7 +34,8 @@ public class AlbumQueryRepository {
                 " select new com.project.release.repository.album.query.AlbumQueryDTO(a.id, a.user.id, a.thumbnail, a.description, a.title, a.user.name) " +
                         " from Album a " +
                         " where a.id = :albumId", AlbumQueryDTO.class
-        ).setParameter("albumId", albumId).getResultList().stream().findFirst().orElse(null); //이래도되나ㄱ-
+        ).setParameter("albumId", albumId).getResultList().stream().findFirst().orElse(null);
+        //.getSingleResult(); -> 결과 없으면 null 반환 안해줌.
     }
 
 

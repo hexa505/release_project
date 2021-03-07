@@ -1,9 +1,9 @@
 package com.project.release.controller;
 
-
 import com.project.release.domain.album.Album;
 import com.project.release.domain.album.Photo;
 import com.project.release.domain.user.User;
+import com.project.release.repository.album.query.AlbumQueryDTO;
 import com.project.release.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,6 @@ import static com.project.release.controller.AlbumResponseDTO.toDto;
 @RestController
 @RequiredArgsConstructor
 public class AlbumController {
-
     private final AlbumService albumService;
     private final PhotoService photoService;
     private final TagService tagService;
@@ -47,7 +46,6 @@ public class AlbumController {
         }).collect(Collectors.toList());
         return new AlbumTagResponse(detailAlbumList, tagResponseList);
     }
-
 
     /**
      * 사용자의 앨범리스트, 태그조회 V2 - SimpleAlbumDTO, tag를 List<String>으로 보냄
@@ -81,7 +79,6 @@ public class AlbumController {
 
 
     /**
-     *
      * @param request
      * @param principal
      * @throws IOException
@@ -91,7 +88,7 @@ public class AlbumController {
                              Principal principal) throws IOException {
         //유저 세션 확인
 //        System.out.println("principal.getName()"+ principal.getName());
-  //      User user = userService.findByCode(Long.parseLong(principal.getName()));
+        //      User user = userService.findByCode(Long.parseLong(principal.getName()));
         User user = userService.findByCode(65801603L);
         albumService.createAlbumAndPhoto(user, request);
         // 뷰 라우터에서 다시 앨범 열람 페이지로 넘어갈것.
@@ -119,13 +116,14 @@ public class AlbumController {
 
     /**
      * 앨범 열람 - 디테일 앨범정보 + 태그 +심플 포토 포토아이디
+     *
      * @param userName
      * @param albumId
      * @return
      */
     @GetMapping("/api/v3/{userName}/album/{albumId}")
-    public com.project.release.repository.album.query.AlbumQueryDTO showAlbumV3(@PathVariable("userName") String userName,
-                                                                                @PathVariable("albumId") Long albumId) {
+    public AlbumQueryDTO showAlbumV3(@PathVariable("userName") String userName,
+                                     @PathVariable("albumId") Long albumId) {
         return albumService.findByAlbumIdQuery(albumId);
     }
 
@@ -150,8 +148,8 @@ public class AlbumController {
      */
     @GetMapping("/api/v1/{userName}/album/{albumId}/{photoId}")
     public DetailPhoto getOnePhoto(@PathVariable("photoId") Long photoId) {
-       Photo photo =  photoService.findById(photoId);
-       return toDto(photo);
+        Photo photo = photoService.findById(photoId);
+        return toDto(photo);
     }
 
 
@@ -174,14 +172,12 @@ public class AlbumController {
      * 앨범 삭제
      *
      * @param userName
-     * @param albumId
-     * 삭제 할 때 이미지 파일들은 어떻게 처리해주지?
+     * @param albumId  삭제 할 때 이미지 파일들은 어떻게 처리해주지?
      */
     @DeleteMapping("/api/v1/{userName}/album/{albumId}")
     public void deleteAlbum(@PathVariable("userName") String userName,
                             @PathVariable("albumId") Long albumId) {
         albumService.deleteAlbum(albumId);
     }
-
 
 }
