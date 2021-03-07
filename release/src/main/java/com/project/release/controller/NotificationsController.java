@@ -2,7 +2,6 @@ package com.project.release.controller;
 
 import com.project.release.domain.Notification;
 import com.project.release.domain.NotificationType;
-import com.project.release.domain.user.User;
 import com.project.release.repository.NotificationRepository;
 import com.project.release.service.NotificationsService;
 import lombok.Data;

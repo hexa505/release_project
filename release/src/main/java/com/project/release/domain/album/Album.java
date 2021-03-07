@@ -34,6 +34,7 @@ public class Album extends BaseTimeEntity {
 
     private String title;
 
+    @Column(columnDefinition = "Long default 1")
     private Long version;
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL,  orphanRemoval = true)
@@ -60,6 +61,7 @@ public class Album extends BaseTimeEntity {
         this.thumbnail = thumbnail;
         this.description = description;
         this.title = title;
+        this.version +=1;
     }
 
 }

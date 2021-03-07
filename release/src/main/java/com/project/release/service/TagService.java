@@ -32,8 +32,6 @@ public class TagService {
         return tagRepository.findById(id).get();
     }
 
-
-
     // List<Tag> -> List<String>
     public List<String> tagToString(List<Tag> tagList) {
         List<String> tagStringList = new ArrayList<>();

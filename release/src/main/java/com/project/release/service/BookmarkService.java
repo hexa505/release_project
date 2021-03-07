@@ -7,7 +7,7 @@ import com.project.release.domain.album.Album;
 import com.project.release.domain.user.User;
 import com.project.release.repository.BookmarkRepository;
 import com.project.release.repository.UserRepository;
-import com.project.release.repository.album.AlbumRepositoryInter;
+import com.project.release.repository.album.AlbumRepository;
 import com.project.release.repository.album.AlbumTagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +26,7 @@ public class BookmarkService {
 
     private final BookmarkRepository bookmarkRepository;
     private final UserRepository userRepository;
-    private final AlbumRepositoryInter albumRepository;
+    private final AlbumRepository albumRepository;
     private final AlbumTagRepository albumTagRepository;
 
     @Value("${resources.uri_path}")

@@ -7,13 +7,12 @@ import com.project.release.domain.AlbumListResult;
 import com.project.release.domain.album.Album;
 import com.project.release.domain.user.User;
 import com.project.release.repository.album.AlbumRepository;
-import com.project.release.repository.album.AlbumRepositoryInter;
-import com.project.release.repository.album.query.AlbumQueryDTO;
 import com.project.release.repository.album.query.AlbumQueryRepository;
 import com.project.release.service.event.AlbumEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -24,7 +23,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -42,8 +40,6 @@ public class AlbumService {
     private final AlbumRepository albumRepository;
     private final AlbumTagService albumTagService;
     private final AlbumQueryRepository albumQueryRepository;
-    private final AlbumQueryRepository2 albumQueryRepository2;
-    private final AlbumRepositoryInter albumRepositoryInter;
     private final  PhotoService photoService; // 이거 나중에 어케 처리하기.............
     private final ApplicationEventPublisher eventPublisher;
 
@@ -59,33 +55,10 @@ public class AlbumService {
                 .title(albumForm.getTitle())
                 .description(albumForm.getDescription()).build();
         albumRepository.save(album);
-        albumTagService.saveTags(album, stringToTagSet(albumForm.getTagString()));
+        albumTagService.saveTags(album, albumForm.getTags());
         return album.getId();
     }
 
-    // tags 스트링을 쪼개 주기..
-            /*    해시태그 작성 방식..
-            #태그, #태그, ...
-            #이런 식으로 띄어쓰기는 허용하지 않음
-            #해시_태그 이건 괜찮*/
-    public Set<String> stringToTagSet(String tags) {
-        //1. , " " 로 쪼개기
-        //2. #있는 것만 #떼고 TagSet에 저장
-        StringTokenizer tk = new StringTokenizer(tags, ", ");
-//        Set<String> hashtags = new Set<String>();
-        HashSet<String> hashtags = new HashSet<>();
-        while (tk.hasMoreTokens()) {
-            String token = tk.nextToken();
-            System.out.println("token = " + token);
-            if (token.charAt(0) == '#') {
-                System.out.println(token.substring(1));
-                hashtags.add(token.substring(1));
-                System.out.println("hashtags.toString() = " + hashtags.toString());
-            }
-        }
-
-        return hashtags;
-    }
 
     public void saveAlbum(Album album){ albumRepository.save(album);}
 
@@ -138,7 +111,7 @@ public class AlbumService {
     }
 
     public List<Album> findAlbumsByUserName(String userName) {
-        return albumRepository.findByUserName(userName);
+        return albumRepository.findAlbumsByUser_Name(userName);
     }
 
     /**
@@ -150,10 +123,10 @@ public class AlbumService {
         List<Album> albums;
 
         if(cursorDateTime == null) {
-            albums = albumRepositoryInter.findByUserIdFirstPage(userId, page);
+            albums = albumRepository.findByUserIdFirstPage(userId, page);
         }
         else {
-            albums = albumRepositoryInter.findByUserIdNextPage(userId, cursorDateTime, page);
+            albums = albumRepository.findByUserIdNextPage(userId, cursorDateTime, page);
         }
 
         Long lastId = albums.isEmpty() ? null : albums.get(albums.size() - 1).getId();
@@ -164,10 +137,6 @@ public class AlbumService {
 
         return new AlbumListResult<>(albumList, lastId, lastDateTime);
 
-    }
-
-    public List<Album> findAlbumsByAlbumTitle(String title) {
-        return albumRepository.findByAlbumTitle(title);
     }
 
     public Album findOneById(Long id) {
