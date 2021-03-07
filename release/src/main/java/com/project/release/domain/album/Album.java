@@ -5,8 +5,12 @@ import com.project.release.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +36,14 @@ public class Album extends BaseTimeEntity {
 
     private Long version;
 
-    @OneToMany(mappedBy = "album", fetch = FetchType.LAZY, cascade = CascadeType.ALL,  orphanRemoval = true)
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL,  orphanRemoval = true)
     private List<AlbumTag> albumTags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "album", fetch = FetchType.LAZY, cascade = CascadeType.ALL,  orphanRemoval = true)
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL,  orphanRemoval = true)
     private List<Photo> photoList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Favorite> favoriteList = new ArrayList<>();
 
     @OneToMany(mappedBy = "album", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
@@ -54,6 +61,5 @@ public class Album extends BaseTimeEntity {
         this.description = description;
         this.title = title;
     }
-
 
 }

@@ -19,12 +19,10 @@ spring:
   jpa: #띄어쓰기 2칸
     hibernate: #띄어쓰기 4칸
       ddl-auto: create #띄어쓰기 6칸
-      show_sql: true
-      format_sql: true
-      default_batch_fetch_size: 100
     properties: #띄어쓰기 4칸
       hibernate: #띄어쓰기 6칸
         format_sql: true #띄어쓰기 8칸
+        default_batch_fetch_size: 100
 
   security:
     oauth2:
@@ -45,37 +43,7 @@ spring:
 
 logging.level: #띄어쓰기 없음
   org.hibernate.SQL: debug #띄어쓰기 2칸
-#
-#resources:
-#  location: "/Users/kim-yena/Desktop/test/upload/"
-#  uri_path: "/upload"
 
-#spring:
-#  datasource:
-#    driver-class-name: org.h2.Driver  #h2 드라이버 설정
-#    url: jdbc:h2:tcp://localhost/~/release
-#    username: sa  # 사용자 이름 (로그인 시 사용)
-#    password:
-#  jpa:
-#    open-in-view: false
-#    hibernate:
-#      ddl-auto: create
-#    properties:
-#      hibernate:
-#        show_sql: true
-#        format_sql: true
-#        default_batch_fetch_size: 100
-#    logging.level:
-#      org.hibernate.SQL: debug
-#      org.hibernate.type: trace
-#  h2:
-#    console:
-#      enabled: true
-#      path: /h2-console
-#
-#logging.level:
-#  org.hibernate.SQL: debug
-#
 resources:
   location: "/varFolder"
   uri_path: "/submit"

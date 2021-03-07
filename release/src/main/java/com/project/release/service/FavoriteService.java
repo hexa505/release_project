@@ -4,6 +4,7 @@ import com.project.release.domain.album.Album;
 import com.project.release.domain.album.Favorite;
 import com.project.release.domain.user.User;
 import com.project.release.repository.album.AlbumRepository;
+import com.project.release.repository.album.AlbumRepositoryInter;
 import com.project.release.repository.FavoriteRepository;
 import com.project.release.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class FavoriteService {
 
     private final FavoriteRepository favoriteRepository;
     private final UserRepository userRepository;
-    private final AlbumRepository albumRepository;
+    private final AlbumRepositoryInter albumRepository;
 
     // 좋아요 여부 체크
     public boolean checkFavorite(Long albumId, Long userId) {
@@ -50,7 +51,9 @@ public class FavoriteService {
                 .orElse(null);
 
         if(favorite != null) {
-            favoriteRepository.delete(favorite);
+            //favoriteRepository.delete(favorite);
+            Album album = albumRepository.getOne(albumId);
+            album.getFavoriteList().remove(favorite);
         }
 
     }

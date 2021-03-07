@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .userInfoEndpoint()
                             .userService(customOAuth2UserService) // oauth2 로그인 이후 동작
                 .and()
-                    .defaultSuccessUrl("/members");
+                    .defaultSuccessUrl("/login/callback");
 
     }
 }
