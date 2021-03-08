@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class AlbumSearchService {
+public class HomeAlbumService {
 
     private final AlbumRepositoryInter albumRepositoryInter;
 
@@ -43,5 +43,7 @@ public class AlbumSearchService {
 
         return new AlbumListResult<>(albumList, lastId, lastCount);
     }
+
+
 
 }

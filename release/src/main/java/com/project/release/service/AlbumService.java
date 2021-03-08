@@ -44,6 +44,7 @@ public class AlbumService {
     private final AlbumQueryRepository2 albumQueryRepository2;
     private final AlbumRepositoryInter albumRepositoryInter;
     private final  PhotoService photoService; // 이거 나중에 어케 처리하기.............
+    private final FeedService feedService;
 
     @Transactional
     public Long createAlbum(AlbumRequestDTO form, User user) {
@@ -57,6 +58,9 @@ public class AlbumService {
                 .description(albumForm.getDescription()).build();
         albumRepository.save(album);
         albumTagService.saveTags(album, stringToTagSet(albumForm.getTagString()));
+
+        feedService.addFeedOnAlbumCreated(user, album); // 새 앨범 피드에 추가
+
         return album.getId();
     }
 
@@ -182,6 +186,7 @@ public class AlbumService {
 
     @Transactional
     public void deleteAlbum(Long albumId) {
+        feedService.deleteFeedOnAlbumDeleted(albumId); // 피드에서 앨범 삭제
         albumRepository.deleteAlbumById(albumId);
     }
 

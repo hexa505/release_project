@@ -77,7 +77,7 @@ public class BookmarkController {
     @GetMapping("/bookmarks")
     public AlbumListResult getBookmarkList(@RequestParam(value = "cursorId", required = false) Long cursorId,
                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                              @RequestParam(value = "cursorDateTime", required = false) LocalDateTime cursorDateTime) {
+                                           @RequestParam(value = "cursorDateTime", required = false) LocalDateTime cursorDateTime) {
 
         SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
         return bookmarkService.getBookmarkList(sessionUser.getId(), cursorId, cursorDateTime, PageRequest.of(0, 4));

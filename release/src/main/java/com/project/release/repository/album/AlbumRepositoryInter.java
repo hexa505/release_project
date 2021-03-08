@@ -13,6 +13,8 @@ import java.util.List;
 @Repository
 public interface AlbumRepositoryInter extends JpaRepository<Album, Long> {
 
+    public List<Album> findByUser_Id(Long userId);
+
     // 유저의 앨범 리스트 조회 last modified 기준
     @Query("select a from Album a "
             + "join fetch a.user user "
@@ -91,6 +93,14 @@ select
      */
 
     // 팔로잉의 앨범 리스트 조회 last modified 기준
+    /*
+    1. 피드 테이블을 만든다
+    id / user id = cur user / writer id : fetch / album id : fetch
+    modified를 갱신해줘야하나...
+        - 팔로잉 새로 했을때, 새 앨범 만들었을때 테이블에 추가
+        - fetch로 싹다 가져온다음 album modifiedDate 기준으로 정렬
+        - 언팔로우, 앨범 삭제시 테이블에서 제거
+    */
 
 
 
