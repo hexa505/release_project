@@ -1,12 +1,20 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <HeaderView/>
     </div>
     <router-view/>
   </div>
 </template>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+import HeaderView from '@/views/HeaderView.vue'
+export default {
+  components: {
+    HeaderView
+  }
+}
+</script>
 
 <style lang="stylus">
 #app

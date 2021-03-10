@@ -46,4 +46,4 @@ logging.level: #띄어쓰기 없음
 
 resources:
   location: "/varFolder"
-  uri_path: "/submit"
+  uri_path: "/upload"
