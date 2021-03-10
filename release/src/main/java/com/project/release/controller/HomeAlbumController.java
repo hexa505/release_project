@@ -1,12 +1,9 @@
 package com.project.release.controller;
 
-import com.project.release.domain.AlbumListDTO;
 import com.project.release.domain.AlbumListResult;
 import com.project.release.domain.user.SessionUser;
 import com.project.release.service.FeedService;
 import com.project.release.service.HomeAlbumService;
-import com.project.release.repository.album.AlbumRepository;
-import com.project.release.service.AlbumSearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -28,8 +24,6 @@ public class HomeAlbumController {
     private final FeedService feedService;
     private final HttpSession httpSession;
 
-    private final AlbumSearchService albumSearchService;
-    private final AlbumRepository albumRepository;
     /*
     일주일간 생성(수정)된 앨범 중 인기 앨범 조회
      */
@@ -57,7 +51,7 @@ public class HomeAlbumController {
     public AlbumListResult getResultAlbums(@RequestParam(value = "cursorId", required = false) Long cursorId,
                                            @RequestParam(value = "keyword") String keyword){
 
-        return albumSearchService.getAlbumsByKeyword(cursorId, keyword);
+        return homeAlbumService.getAlbumsByKeyword(cursorId, keyword);
     }
 
 

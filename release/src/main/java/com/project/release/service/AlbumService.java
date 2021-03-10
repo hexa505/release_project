@@ -5,12 +5,15 @@ import com.project.release.controller.AlbumRequestDTO;
 import com.project.release.domain.AlbumListDTO;
 import com.project.release.domain.AlbumListResult;
 import com.project.release.domain.album.Album;
+import com.project.release.domain.album.AlbumTag;
 import com.project.release.domain.user.User;
 import com.project.release.repository.album.AlbumRepository;
+import com.project.release.repository.album.AlbumTagRepository;
 import com.project.release.repository.album.query.AlbumQueryRepository;
 import com.project.release.service.event.AlbumEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +25,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -39,11 +41,9 @@ public class AlbumService {
     @Value("${resources.uri_path}")
     private String resourcesUriPath;
     private final AlbumRepository albumRepository;
-    private final AlbumTagRepositoryInter albumTagRepositoryInter;
+    private final AlbumTagRepository albumTagRepository;
     private final AlbumTagService albumTagService;
     private final AlbumQueryRepository albumQueryRepository;
-    private final AlbumQueryRepository2 albumQueryRepository2;
-    private final AlbumRepositoryInter albumRepositoryInter;
     private final  PhotoService photoService; // 이거 나중에 어케 처리하기.............
     private final ApplicationEventPublisher eventPublisher;
 
@@ -60,34 +60,11 @@ public class AlbumService {
                 .title(albumForm.getTitle())
                 .description(albumForm.getDescription()).build();
         albumRepository.save(album);
-        albumTagService.saveTags(album, stringToTagSet(albumForm.getTagString()));
+        albumTagService.saveTags(album, albumForm.getTags());
 
         return album;
     }
 
-    // tags 스트링을 쪼개 주기..
-            /*    해시태그 작성 방식..
-            #태그, #태그, ...
-            #이런 식으로 띄어쓰기는 허용하지 않음
-            #해시_태그 이건 괜찮*/
-    public Set<String> stringToTagSet(String tags) {
-        //1. , " " 로 쪼개기
-        //2. #있는 것만 #떼고 TagSet에 저장
-        StringTokenizer tk = new StringTokenizer(tags, ", ");
-//        Set<String> hashtags = new Set<String>();
-        HashSet<String> hashtags = new HashSet<>();
-        while (tk.hasMoreTokens()) {
-            String token = tk.nextToken();
-            System.out.println("token = " + token);
-            if (token.charAt(0) == '#') {
-                System.out.println(token.substring(1));
-                hashtags.add(token.substring(1));
-                System.out.println("hashtags.toString() = " + hashtags.toString());
-            }
-        }
-
-        return hashtags;
-    }
 
     public void saveAlbum(Album album){ albumRepository.save(album);}
 
@@ -178,8 +155,8 @@ public class AlbumService {
      * @author Yena Kim
      */
     public AlbumListResult<AlbumListDTO, LocalDateTime> getUserAlbumsWithTag(User user, Long tagId, LocalDateTime cursorDateTime, Pageable page) {
-        List<AlbumTag> albumTags = (cursorDateTime == null) ? albumTagRepositoryInter.findAlbumByTagFirstPage(user.getId(), tagId, page)
-                                                            : albumTagRepositoryInter.findAlbumByTagNextPage(user.getId(), tagId, cursorDateTime, page);
+        List<AlbumTag> albumTags = (cursorDateTime == null) ? albumTagRepository.findAlbumByTagFirstPage(user.getId(), tagId, page)
+                                                            : albumTagRepository.findAlbumByTagNextPage(user.getId(), tagId, cursorDateTime, page);
 
         LocalDateTime lastDateTime = albumTags.isEmpty() ? null : albumTags.get(albumTags.size() - 1).getAlbum().getModifiedDate();
 
@@ -188,10 +165,6 @@ public class AlbumService {
                 .collect(Collectors.toList());
 
         return new AlbumListResult<>(albumDtoList, null, lastDateTime);
-    }
-
-    public List<Album> findAlbumsByAlbumTitle(String title) {
-        return albumRepository.findByAlbumTitle(title);
     }
 
     public Album findOneById(Long id) {

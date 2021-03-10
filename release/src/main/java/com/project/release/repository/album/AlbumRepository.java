@@ -13,6 +13,8 @@ import java.util.List;
 @Repository
 public interface AlbumRepository extends JpaRepository<Album, Long> {
 
+    public List<Album> findByUser_Id(Long userId);
+
     // 유저의 앨범 리스트 조회 last modified 기준
     @Query("select a from Album a "
             + "join fetch a.user user "
@@ -78,7 +80,6 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
                     "    where a.ALBUM_ID = :id" +
                     "    limit 1")
     public String getCursor(@Param("id") Long id);
-
 
 
 }

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class AlbumSearchService {
+public class HomeAlbumService {
 
     private final AlbumRepository albumRepository;
 
