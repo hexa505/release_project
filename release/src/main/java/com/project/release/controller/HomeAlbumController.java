@@ -47,4 +47,12 @@ public class HomeAlbumController {
         return feedService.getFeed(sessionUser.getId(), cursorId, cursorDateTime, PageRequest.of(0, 4));
     }
 
+    @GetMapping("/search")
+    public AlbumListResult getResultAlbums(@RequestParam(value = "cursorId", required = false) Long cursorId,
+                                           @RequestParam(value = "keyword") String keyword){
+
+        return homeAlbumService.getAlbumsByKeyword(cursorId, keyword);
+    }
+
+
 }

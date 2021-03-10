@@ -26,6 +26,6 @@ public class AlbumRequestDTO {
         private MultipartFile photo;
         private String title;
         private String description;
-        private String tagString;
+        private List<String> tags;
     }
 }

@@ -90,7 +90,7 @@ public class InitDB {
         public void albumInit() {
             User user2 = userService.findByName("user2");
 
-            for(int i = 1; i <= 10; i++) {
+            for(int i = 1; i <= 20; i++) {
                 Album album = Album.builder()
                         .user(user2)
                         .title("album title " + Integer.toString(i))

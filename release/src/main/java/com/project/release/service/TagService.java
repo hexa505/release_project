@@ -20,20 +20,17 @@ public class TagService {
 
     //기존에 존재하는지 체크하여 없으면 생성하고 아이디 리턴
     @Transactional
-    public Long findOrCreateTag(String tagName) {
-        if (tagRepository.findByName(tagName).isEmpty()) {
+    public Long findOrSaveTag(String tagName) {
+        if (tagRepository.findTagByTagName(tagName) == null) {
             Tag tag = Tag.builder().tagName(tagName).build();
-            return tagRepository.save(tag);
-        } else return tagRepository.findByName(tagName).stream().findFirst().orElse(null ).getId();
+            return tagRepository.save(tag).getId();
+        } else return tagRepository.findTagByTagName(tagName).getId();
     }
-
 
     //태그 아이디로 찾는고
     public Tag findOne(Long id) {
-        return tagRepository.findOne(id);
+        return tagRepository.findById(id).get();
     }
-
-
 
     // List<Tag> -> List<String>
     public List<String> tagToString(List<Tag> tagList) {
@@ -41,7 +38,6 @@ public class TagService {
         tagList.stream().map(tag -> tagStringList.add(tag.getTagName())).collect(Collectors.toList());
         return tagStringList;
     }
-
 
 
 }

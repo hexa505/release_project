@@ -1,34 +1,13 @@
 package com.project.release.repository.album;
 
 import com.project.release.domain.album.Tag;
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityManager;
-import java.util.List;
 
 
 @Repository
-@RequiredArgsConstructor
-public class TagRepository {
+public interface TagRepository extends JpaRepository<Tag, Long> {
 
-    private final EntityManager em;
-
-    public Long save(Tag tag) {
-        em.persist(tag);
-        return tag.getId();
-    }
-
-
-    public List<Tag> findByName(String tagName) {
-        return em.createQuery("select t from Tag t where t.tagName = :tagName", Tag.class).setParameter("tagName", tagName).getResultList();
-    }
-
-
-    //요거는... 태그 아이디로 조회하기
-    public Tag findOne(Long id) {
-        return em.find(Tag.class, id);
-    }
-
+    public Tag findTagByTagName(String tagName);
 
 }

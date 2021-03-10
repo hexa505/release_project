@@ -22,7 +22,8 @@ public class PhotoService {
 
     @Transactional
     public Long savePhoto(AlbumRequestDTO.PhotoForm photoForm, Long albumId, int index) {
-        Album album = albumRepository.findOne(albumId);
+        Album album = albumRepository.findById(albumId).get();
+        System.out.println(photoForm.getPhoto().getOriginalFilename());
         Photo photo = Photo.builder()
                 .album(album)
                 .pic(photoForm.getPhoto().getOriginalFilename())
@@ -30,7 +31,7 @@ public class PhotoService {
                 .num(index)
                 .build();
         photo.setAlbum(album);
-        return photoRepository.save(photo);
+        return photoRepository.save(photo).getId();
     }
 
 
@@ -40,7 +41,7 @@ public class PhotoService {
     }
 
     public Photo findOneByAlbumIdAndNum(Long albumId, int num) {
-        return photoRepository.findOneByAlbumIdAndNum(albumId, num);
+        return photoRepository.findPhotoByAlbum_IdAndNum(albumId, num);
     }
 
     @Transactional
@@ -59,13 +60,8 @@ public class PhotoService {
         save(photo);
     }
 
-    @Transactional
-    public void deletePhotosByAlbumId(Long albumId) {
-        photoRepository.deletePhotosByAlbumId(albumId);
-    }
 
-
-    public Photo finOne(Long photoId) {
-        return photoRepository.findOne(photoId);
+    public Photo findById(Long photoId) {
+        return photoRepository.findById(photoId).get();
     }
 }

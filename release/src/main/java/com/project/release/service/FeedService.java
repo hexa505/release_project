@@ -7,7 +7,7 @@ import com.project.release.domain.album.Album;
 import com.project.release.domain.user.User;
 import com.project.release.repository.FeedRepository;
 import com.project.release.repository.FollowRepository;
-import com.project.release.repository.album.AlbumRepositoryInter;
+import com.project.release.repository.album.AlbumRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +25,7 @@ public class FeedService {
 
     private final FeedRepository feedRepository;
     private final FollowRepository followRepository;
-    private final AlbumRepositoryInter albumRepositoryInter;
+    private final AlbumRepository albumRepository;
 
     @Value("${resources.uri_path}")
     private String resourcesUriPath;
@@ -34,7 +34,7 @@ public class FeedService {
     @Transactional
     public void addFeedOnFollow(User user, User followed) {
 
-        for(Album album : albumRepositoryInter.findByUser_Id(followed.getId())) {
+        for(Album album : albumRepository.findByUser_Id(followed.getId())) {
             feedRepository.save(Feed.builder()
                     .user(user)
                     .writer(followed)
