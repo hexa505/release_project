@@ -39,7 +39,7 @@ public class AlbumController {
      * @author Yena Kim
      * @return
      */
-    @GetMapping("/api/v3/{username}/albums")
+    @GetMapping("/api/v1/{username}/albums")
     public AlbumListResult getAlbumList(@PathVariable("username") String username, @RequestParam(value = "cursorId", required = false) Long cursorId,
                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                         @RequestParam(value = "cursorDateTime", required = false) LocalDateTime cursorDateTime) {
@@ -76,7 +76,7 @@ public class AlbumController {
     }
 
 
-    @PostMapping("/{userName}/album")
+    @PostMapping("/api/v1/{userName}/album")
     public void publishAlbum(@ModelAttribute AlbumRequestDTO request,
                              Principal principal) throws IOException {
         //  유저 세션 확인
@@ -93,7 +93,7 @@ public class AlbumController {
      * @param albumId
      * @return
      */
-    @GetMapping("/api/v3/{userName}/album/{albumId}")
+    @GetMapping("/api/v1/{userName}/album/{albumId}")
     public AlbumQueryDTO showAlbumV3(@PathVariable("userName") String userName,
                                      @PathVariable("albumId") Long albumId) {
         return albumService.findByAlbumIdQuery(albumId);

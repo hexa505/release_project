@@ -7,7 +7,7 @@ spring:
 
   datasource:
     driver-class-name: org.h2.Driver  #h2 드라이버 설정
-    url: jdbc:h2:tcp://localhost/~/release
+    url: jdbc:h2:~/release
     username: sa  # 사용자 이름 (로그인 시 사용)
     password:
 
@@ -45,5 +45,5 @@ logging.level: #띄어쓰기 없음
   org.hibernate.SQL: debug #띄어쓰기 2칸
 
 resources:
-  location: "/varFolder"
-  uri_path: "/submit"
+  location: "/Users/kim-yena/Desktop/test/upload/"
+  uri_path: "/upload"

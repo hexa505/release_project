@@ -27,7 +27,6 @@ public class BookmarkService {
     private final BookmarkRepository bookmarkRepository;
     private final UserRepository userRepository;
     private final AlbumRepository albumRepository;
-    private final AlbumTagRepository albumTagRepository;
 
     @Value("${resources.uri_path}")
     private String resourcesUriPath;
@@ -66,7 +65,7 @@ public class BookmarkService {
     // 북마크 리스트 조회
     public AlbumListResult<BookmarkDTO, LocalDateTime> getBookmarkList(Long userId, Long cursorId, LocalDateTime cursorDateTime, Pageable page) {
         List<Bookmark> findBookmarks;
-        if(cursorId == null) { // 첫 스크롤
+        if(cursorId == null || cursorDateTime == null) { // 첫 스크롤
             findBookmarks = bookmarkRepository.findBookmarkFirstPage(userId, page);
         }
         else {

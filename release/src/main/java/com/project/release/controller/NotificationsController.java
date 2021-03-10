@@ -22,7 +22,7 @@ public class NotificationsController {
     private final NotificationRepository notificationRepository;
     private final NotificationsService notificationsService;
 
-    @GetMapping("/{userName}/notifications") // userName 대신에 현재 로그인된 유저정보 받아오기
+    @GetMapping("/api/v1/{userName}/notifications") // userName 대신에 현재 로그인된 유저정보 받아오기
     public Result<NotificationDTO> getNotifications(@PathVariable("userName") String userName) {
 
         Result result = new Result();
@@ -63,14 +63,14 @@ public class NotificationsController {
     }
 
 
-    @DeleteMapping("/{userName}/notifications/{notificationsId}")
+    @DeleteMapping("/api/v1/{userName}/notifications/{notificationsId}")
     public void deleteNotifications(@PathVariable("userName") String userName,
                                     @PathVariable("notificationsId") Long id) {
         notificationRepository.deleteById(id);
     }
 
     // 읽지 않은 알림......읽어야 처리됨 혹은 그냥 getmapping /notification하면 전부 읽은걸로 체크하기?
-    @GetMapping("/{userName}/notifications/{notificationsId}")
+    @GetMapping("/api/v1/{userName}/notifications/{notificationsId}")
     public void checkedNotifications(@PathVariable("userName") String userName,
                                     @PathVariable("notificationsId") Long id) {
         notificationsService.markAsReadById(id);

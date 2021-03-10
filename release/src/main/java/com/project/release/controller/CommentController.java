@@ -14,7 +14,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/comment/{albumId}")
+    @PostMapping("/api/v1/comment/{albumId}")
     public void 댓글등록(@PathVariable("albumId") Long albumId, @RequestBody CommentDTO request) {
         try {
             commentService.saveComment(request);
@@ -25,12 +25,12 @@ public class CommentController {
 
     }
 
-    @GetMapping("/comment/{albumId}")
+    @GetMapping("/api/v1/comment/{albumId}")
     public List<CommentDTO> 댓글조회(@PathVariable("albumId") Long albumId) {
         return commentService.findCommentDTOsByAlbumId(albumId);
     }
 
-    @DeleteMapping("/comment/{albumId}/{commentId}")
+    @DeleteMapping("/api/v1/comment/{albumId}/{commentId}")
     public void 댓글삭제(@PathVariable("commentId") Long commentId) {
         commentService.deleteCommentById(commentId);
     }

@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
 
-    @Query("" +
+    @Query(
             " select c from Comment c" +
             " left join c.parent" +
             " where c.album.id = :albumId" +
@@ -21,7 +21,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             " c.createdDate ASC ")
     public List<Comment> findCommentByAlbum_Id(@Param("albumId") Long albumId);
 
-    @Query("" +
+    @Query(
             " select c from Comment c" +
             " left join c.parent" +
             " where c.id = :id")
