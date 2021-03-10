@@ -1,5 +1,6 @@
 package com.project.release.controller;
 
+import com.project.release.domain.AlbumListDTO;
 import com.project.release.domain.AlbumListResult;
 import com.project.release.repository.album.AlbumRepository;
 import com.project.release.service.AlbumSearchService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -35,5 +37,6 @@ public class HomeAlbumController {
 
         return albumSearchService.getAlbumsByKeyword(cursorId, keyword);
     }
+
 
 }

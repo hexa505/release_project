@@ -62,8 +62,10 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
 
     @Query(nativeQuery = true, value =
             "    select *, CONCAT( FORMATDATETIME(a.MODIFY_DATE ,'YYMMDDHH'), LPAD(a.album_ID,10,'0')) as cursor" +
-            "    from ALBUM a" +
+            "    from ALBUM a " +
+                    "inner join User u on a.User_id = u.USER_id" +
             "    where REGEXP_LIKE(a.title, :keyword) or REGEXP_LIKE(a.DESCRIPTION , :keyword)" +
+            "    or a.ALBUM_ID = (select distinct at.ALBUM_ID from ALBUM_TAG at, TAG t WHERE REGEXP_LIKE(t.tag_NAME, :keyword))" +
             "    GROUP BY a.ALBUM_ID" +
             "    having cursor < :lastId" +
             "    ORDER by cursor DESC" +
@@ -76,5 +78,7 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
                     "    where a.ALBUM_ID = :id" +
                     "    limit 1")
     public String getCursor(@Param("id") Long id);
+
+
 
 }
