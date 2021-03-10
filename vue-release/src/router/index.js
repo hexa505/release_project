@@ -1,22 +1,54 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-
+import HomePageLayout from '../views/HomePageLayout.vue'
+import SearchPageLayout from '../views/SearchPageLayout.vue'
+import NotificationPageLayout from '../views/NotificationPageLayout.vue'
+import SignUpPageLayout from '../views/SignUpPageLayout.vue'
+import UserPageLayout from '../views/UserPageLayout.vue'
+import PublishAlbumPageLayout from '../views/PublishAlbumPageLayout.vue'
+import ProfilePageLayout from '../views/ProfilePageLayout.vue'
+import EditAlbumPageLayout from '../views/EditAlbumPageLayout.vue'
 Vue.use(VueRouter)
-
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'HomePageLayout',
+    component: HomePageLayout
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/search',
+    name: 'SearchPageLayout',
+    component: SearchPageLayout
+  },
+  {
+    path: '/notifications',
+    name: 'NotificationPageLayout',
+    component: NotificationPageLayout
+  },
+  {
+    path: '/signup',
+    name: 'SignUpPageLayout',
+    component: SignUpPageLayout
+  },
+  {
+    path: '/member/@:username',
+    name: 'UserPageLayout',
+    component: UserPageLayout
+  },
+  {
+    path: '/publish',
+    name: 'PublishAlbumPageLayout',
+    component: PublishAlbumPageLayout
+  },
+  {
+    path: '/edit/:albumid',
+    name: 'EditAlbumPageLayout',
+    component: EditAlbumPageLayout
+  },
+  {
+    path: '/profile',
+    name: 'ProfilePageLayout',
+    component: ProfilePageLayout
   }
 ]
 
