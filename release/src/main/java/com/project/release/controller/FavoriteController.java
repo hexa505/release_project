@@ -21,7 +21,7 @@ public class FavoriteController {
     /*
     앨범 좋아요 여부 체크
      */
-    @GetMapping("/favorite/{albumId}")
+    @GetMapping("/api/v1/favorite/{albumId}")
     public Boolean checkFavorite(@PathVariable("albumId") Long albumId) {
         SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
         return favoriteService.checkFavorite(albumId, userService.findById(sessionUser.getId()).getId());
@@ -30,7 +30,7 @@ public class FavoriteController {
     /*
     앨범 좋아요 하기
      */
-    @PostMapping("/favorite/{albumId}")
+    @PostMapping("/api/v1/favorite/{albumId}")
     public void favorite(@PathVariable("albumId") Long albumId) {
         SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
         favoriteService.addFavorite(albumId, sessionUser.getId());
@@ -39,7 +39,7 @@ public class FavoriteController {
     /*
     앨범 좋아요 취소
      */
-    @DeleteMapping("/favorite/{albumId}")
+    @DeleteMapping("/api/v1/favorite/{albumId}")
     public void cancelFavorite(@PathVariable("albumId") Long albumId) {
         SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
         favoriteService.deleteFavorite(albumId, sessionUser.getId());
@@ -48,7 +48,7 @@ public class FavoriteController {
     /*
     앨범 좋아요 수 조회
      */
-    @GetMapping("/favorite/{albumId}/count")
+    @GetMapping("/api/v1/favorite/{albumId}/count")
     public Long getFavoriteCount(@PathVariable("albumId") Long albumId) {
         return favoriteService.countFavorite(albumId);
     }

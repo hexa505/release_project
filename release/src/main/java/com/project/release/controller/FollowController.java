@@ -24,7 +24,7 @@ public class FollowController {
     /*
     팔로우 여부 체크
      */
-    @GetMapping("/follow/{username}")
+    @GetMapping("/api/v1/follow/{username}")
     public Boolean isFollowed(@PathVariable("username") String username) {
         SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
         return followService.followCheck(sessionUser.getId(), userService.findByName(username).getId());
@@ -33,7 +33,7 @@ public class FollowController {
     /*
     팔로우
      */
-    @PostMapping("/follow/{username}")
+    @PostMapping("/api/v1/follow/{username}")
     public void follow(@PathVariable("username") String username) {
         SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
         followService.follow(userService.findById(sessionUser.getId()), userService.findByName(username));
@@ -42,7 +42,7 @@ public class FollowController {
     /*
     언팔로우
      */
-    @DeleteMapping("/follow/{username}")
+    @DeleteMapping("/api/v1/follow/{username}")
     public void unfollow(@PathVariable("username") String username) {
         SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
         followService.unfollow(userService.findById(sessionUser.getId()), userService.findByName(username));
@@ -51,7 +51,7 @@ public class FollowController {
     /*
     팔로잉 리스트 조회
      */
-    @GetMapping("/{username}/followings")
+    @GetMapping("/api/v1/{username}/followings")
     public FollowListResult getFollowings(@PathVariable("username") String username, @RequestParam(value = "cursor", required = false) Long cursorId ) {
         User user = userService.findByName(username);
         return followService.getFollowingList(user, cursorId, PageRequest.of(0, 20));
@@ -60,7 +60,7 @@ public class FollowController {
     /*
     팔로워 리스트 조회
      */
-    @GetMapping("/{username}/followers")
+    @GetMapping("/api/v1/{username}/followers")
     public FollowListResult getFollowers(@PathVariable("username") String username, @RequestParam(value = "cursor", required = false) Long cursorId) {
         User user = userService.findByName(username);
         return followService.getFollowerList(user, cursorId, PageRequest.of(0, 20));
@@ -69,7 +69,7 @@ public class FollowController {
     /*
     팔로잉 카운트
      */
-    @GetMapping("/{username}/followings/count")
+    @GetMapping("/api/v1/{username}/followings/count")
     public Long countFollowings(@PathVariable("username") String username) {
         User user = userService.findByName(username);
         return followService.countFollowings(user);
@@ -78,7 +78,7 @@ public class FollowController {
     /*
     팔로워 카운트
      */
-    @GetMapping("/{username}/followers/count")
+    @GetMapping("/api/v1/{username}/followers/count")
     public Long countFollowers(@PathVariable("username") String username) {
         User user = userService.findByName(username);
         return followService.countFollowers(user);

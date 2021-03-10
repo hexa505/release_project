@@ -48,6 +48,20 @@ public class AlbumController {
     }
 
     /**
+     * 사용자의 앨범리스트 태그로 검색
+     *
+     * @author Yena Kim
+     */
+    @GetMapping("/api/v1/{username}/albums/tag/{tagId}")
+    public AlbumListResult getAlbumsWithTag(@PathVariable("username") String username, @PathVariable("tagId") Long tagId,
+                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                        @RequestParam(value = "cursorDateTime", required = false) LocalDateTime cursorDateTime) {
+
+        User user = userService.findByName(username);
+        return albumService.getUserAlbumsWithTag(user, tagId, cursorDateTime, PageRequest.of(0, 4));
+    }
+
+    /**
      * 태그 조회 - List<String> tag 반환
      *
      * @param userName

@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public class FollowService {
 
     private final FollowRepository followRepository;
+    private final FeedService feedService;
 
     @Value("${resources.uri_path}")
     private String resourcesUriPath;
@@ -32,9 +33,12 @@ public class FollowService {
     @Transactional
     public void follow(User user, User followedUser) {
         validateUserAndFollowedUser(user, followedUser);
+
         if(!followCheck(user.getId(), followedUser.getId())) {
             Follow newFollow = new Follow(user, followedUser);
             followRepository.save(newFollow);
+
+            feedService.addFeedOnFollow(user, followedUser);
         }
     }
 
@@ -46,6 +50,7 @@ public class FollowService {
 
         if(deleteFollow != null) {
             followRepository.delete(deleteFollow);
+            feedService.deleteFeedOnUnfollow(user, followedUser);
         }
     }
 

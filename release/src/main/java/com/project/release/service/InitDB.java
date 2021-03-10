@@ -26,7 +26,7 @@ public class InitDB {
     @PostConstruct
     public void init() {
         initService.userInit();
-        initService.followInit();
+        //initService.followInit();
         initService.albumInit();
         initService.albumTagInit();
         initService.bookmarkInit();
@@ -55,6 +55,12 @@ public class InitDB {
                         .code((long)i)
                         .build();
                 em.persist(newUser);
+
+                Album newAlbum = Album.builder()
+                        .user(newUser)
+                        .title("album initiated")
+                        .build();
+                em.persist(newAlbum);
             }
 
         }

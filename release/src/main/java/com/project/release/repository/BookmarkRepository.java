@@ -25,12 +25,12 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     public List<Bookmark> findBookmarkFirstPage(@Param("userId") Long userId, Pageable page);
 
     // custom cursor: yyyy-mm-dd{id}
-    @Query("select b, concat(function('lpad', album.modifiedDate, 10), function('lpad', b.id, 10, '0')) from Bookmark b "
+    @Query("select b, concat(function('rpad', album.modifiedDate, 26, '0'), function('lpad', b.id, 10, '0')) from Bookmark b "
             + "join fetch b.album album "
             + "join fetch album.user writer "
             + "where b.user.id = :userId and "
-            + "concat(function('lpad', album.modifiedDate, 10), function('lpad', b.id, 10, '0')) "
-            + "< concat(function('lpad', :dateTime, 10), function('lpad', :bookmarkId, 10, '0'))"
+            + "concat(function('rpad', album.modifiedDate, 26, '0'), function('lpad', b.id, 10, '0')) "
+            + "< concat(function('rpad', :dateTime, 26, '0'), function('lpad', :bookmarkId, 10, '0'))"
             + "order by album.modifiedDate desc, b.id desc")
     public List<Bookmark> findBookmarkNextPage(@Param("userId") Long userId, @Param("bookmarkId") Long bookmarkId, @Param("dateTime") LocalDateTime dateTime, Pageable page);
 

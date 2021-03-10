@@ -15,6 +15,11 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
     // 나 -> 상대가 팔로우 상태인지 확인
     public List<Follow> findByUser_IdAndFollowedUser_Id(Long userId, Long followedUserId);
 
+    @Query("select f from Follow f "
+            + "join fetch f.user from_user "
+            + "where f.followedUser.id = :followedId")
+    public List<Follow> findByFollowedUser(@Param("followedId") Long followedId);
+
     // 유저의 팔로잉 목록
     @Query("select f from Follow f "
             + "join fetch f.user from_user "

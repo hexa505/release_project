@@ -11,7 +11,6 @@ import com.project.release.repository.album.query.AlbumQueryRepository;
 import com.project.release.service.event.AlbumEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,10 +22,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
-
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
@@ -37,15 +36,21 @@ import java.util.stream.Collectors;
 public class AlbumService {
     @Value("${resources.location}")
     private String resourcesLocation;
+    @Value("${resources.uri_path}")
+    private String resourcesUriPath;
     private final AlbumRepository albumRepository;
+    private final AlbumTagRepositoryInter albumTagRepositoryInter;
     private final AlbumTagService albumTagService;
     private final AlbumQueryRepository albumQueryRepository;
+    private final AlbumQueryRepository2 albumQueryRepository2;
+    private final AlbumRepositoryInter albumRepositoryInter;
     private final  PhotoService photoService; // 이거 나중에 어케 처리하기.............
     private final ApplicationEventPublisher eventPublisher;
 
+    private final FeedService feedService;
 
     @Transactional
-    public Long createAlbum(AlbumRequestDTO form, User user) {
+    public Album createAlbum(AlbumRequestDTO form, User user) {
 
         //userName으로 유저 엔티티 찾아서 유저 인스턴스 넣는 걸로 바꿀 것
         AlbumRequestDTO.AlbumForm albumForm = form.getAlbumForm();
@@ -55,10 +60,34 @@ public class AlbumService {
                 .title(albumForm.getTitle())
                 .description(albumForm.getDescription()).build();
         albumRepository.save(album);
-        albumTagService.saveTags(album, albumForm.getTags());
-        return album.getId();
+        albumTagService.saveTags(album, stringToTagSet(albumForm.getTagString()));
+
+        return album;
     }
 
+    // tags 스트링을 쪼개 주기..
+            /*    해시태그 작성 방식..
+            #태그, #태그, ...
+            #이런 식으로 띄어쓰기는 허용하지 않음
+            #해시_태그 이건 괜찮*/
+    public Set<String> stringToTagSet(String tags) {
+        //1. , " " 로 쪼개기
+        //2. #있는 것만 #떼고 TagSet에 저장
+        StringTokenizer tk = new StringTokenizer(tags, ", ");
+//        Set<String> hashtags = new Set<String>();
+        HashSet<String> hashtags = new HashSet<>();
+        while (tk.hasMoreTokens()) {
+            String token = tk.nextToken();
+            System.out.println("token = " + token);
+            if (token.charAt(0) == '#') {
+                System.out.println(token.substring(1));
+                hashtags.add(token.substring(1));
+                System.out.println("hashtags.toString() = " + hashtags.toString());
+            }
+        }
+
+        return hashtags;
+    }
 
     public void saveAlbum(Album album){ albumRepository.save(album);}
 
@@ -97,19 +126,23 @@ public class AlbumService {
 
         saveFile(request.getAlbumForm().getPhoto(), resourcesLocation + "/" + user.getName() + "/album");
         //1. 앨범 폼 받기
-        Long albumId = createAlbum(request, user);
+        Album album = createAlbum(request, user);
         request.getPhotoFormList().forEach(photoRequest -> {
             //2. 포토 리스트 받기..
-            photoService.savePhoto(photoRequest, albumId, request.getPhotoFormList().indexOf(photoRequest));
+            photoService.savePhoto(photoRequest, album.getId(), request.getPhotoFormList().indexOf(photoRequest));
             try {
                 saveFile(photoRequest.getPhoto(), resourcesLocation + "/" + user.getName() + "/album");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-        saveFile(request.getAlbumForm().getPhoto(), resourcesLocation + "/" + user.getName() + "/album");
+
+        feedService.addFeedOnAlbumCreated(user, album); // 새 앨범 피드에 추가
+
     }
 
+
+    //유저name으로 앨범 리스트 조회
     public List<Album> findAlbumsByUserName(String userName) {
         return albumRepository.findAlbumsByUser_Name(userName);
     }
@@ -132,11 +165,33 @@ public class AlbumService {
         Long lastId = albums.isEmpty() ? null : albums.get(albums.size() - 1).getId();
         LocalDateTime lastDateTime = albums.isEmpty() ? null : albums.get(albums.size() - 1).getModifiedDate();
         List<AlbumListDTO> albumList = albums.stream()
-                .map(a -> new AlbumListDTO(a, a.getUser(), resourcesLocation))
+                .map(a -> new AlbumListDTO(a, a.getUser(), resourcesUriPath))
                 .collect(Collectors.toList());
 
         return new AlbumListResult<>(albumList, lastId, lastDateTime);
 
+    }
+
+    /**
+     * 유저의 특정 태그 포함하는 앨범 리스트 조회
+     *
+     * @author Yena Kim
+     */
+    public AlbumListResult<AlbumListDTO, LocalDateTime> getUserAlbumsWithTag(User user, Long tagId, LocalDateTime cursorDateTime, Pageable page) {
+        List<AlbumTag> albumTags = (cursorDateTime == null) ? albumTagRepositoryInter.findAlbumByTagFirstPage(user.getId(), tagId, page)
+                                                            : albumTagRepositoryInter.findAlbumByTagNextPage(user.getId(), tagId, cursorDateTime, page);
+
+        LocalDateTime lastDateTime = albumTags.isEmpty() ? null : albumTags.get(albumTags.size() - 1).getAlbum().getModifiedDate();
+
+        List<AlbumListDTO> albumDtoList = albumTags.stream()
+                .map(at -> new AlbumListDTO(at.getAlbum(), user, resourcesUriPath))
+                .collect(Collectors.toList());
+
+        return new AlbumListResult<>(albumDtoList, null, lastDateTime);
+    }
+
+    public List<Album> findAlbumsByAlbumTitle(String title) {
+        return albumRepository.findByAlbumTitle(title);
     }
 
     public Album findOneById(Long id) {
@@ -152,6 +207,7 @@ public class AlbumService {
     public void deleteAlbum(Long albumId) {
         // TODO: 삭제할 대상이 없는 경우 처리
         albumRepository.findById(albumId).get();
+        feedService.deleteFeedOnAlbumDeleted(albumId); // 피드에서 앨범 삭제
         albumRepository.deleteAlbumById(albumId);
     }
 
