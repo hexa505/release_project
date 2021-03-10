@@ -31,7 +31,7 @@ public class BookmarkController {
     /*
     북마크인지 체크
      */
-    @GetMapping("/bookmark/{albumId}")
+    @GetMapping("/api/v1/bookmark/{albumId}")
     public boolean checkBookmark(@PathVariable("albumId") Long albumId) {
         SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
         return bookmarkService.checkBookmark(sessionUser.getId(), albumId);
@@ -40,7 +40,7 @@ public class BookmarkController {
     /*
     북마크 추가
      */
-    @PostMapping("/bookmark/{albumId}")
+    @PostMapping("/api/v1/bookmark/{albumId}")
     public void addBookmark(@PathVariable("albumId") Long albumId) {
         SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
         bookmarkService.addBookmark(sessionUser.getId(), albumId);
@@ -49,7 +49,7 @@ public class BookmarkController {
     /*
     북마크 취소
      */
-    @DeleteMapping("/bookmark/{albumId}")
+    @DeleteMapping("/api/v1/bookmark/{albumId}")
     public void cancelBookmark(@PathVariable("albumId") Long albumId) {
         SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
         bookmarkService.deleteBookmark(sessionUser.getId(), albumId);
@@ -58,7 +58,7 @@ public class BookmarkController {
     /*
     앨범의 북마크수 조회
      */
-    @GetMapping("/bookmark/{albumId}/count")
+    @GetMapping("/api/v1/bookmark/{albumId}/count")
     public Long getBookmarkCount(@PathVariable("albumId") Long albumId) {
         return bookmarkService.countBookmarkOfAlbum(albumId);
     }
@@ -66,7 +66,7 @@ public class BookmarkController {
     /*
     사용자의 북마크수 조회
      */
-    @GetMapping("/{username}/bookmark/count")
+    @GetMapping("/api/v1/{username}/bookmark/count")
     public Long getUserBookmarkCount(@PathVariable("username") String username) {
         return bookmarkService.countBookmarks(userService.findByName(username).getId());
     }
@@ -74,7 +74,7 @@ public class BookmarkController {
     /*
     자신의 북마크 앨범 리스트 조회
      */
-    @GetMapping("/bookmarks")
+    @GetMapping("/api/v1/bookmarks")
     public AlbumListResult getBookmarkList(@RequestParam(value = "cursorId", required = false) Long cursorId,
                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                            @RequestParam(value = "cursorDateTime", required = false) LocalDateTime cursorDateTime) {
@@ -86,7 +86,7 @@ public class BookmarkController {
     /*
     북마크 열람시 버전 갱신, 이후에 실제 앨범 열람 페이지로
      */
-    @GetMapping("/{username}/bookmark/{albumId}/{bookmarkId}")
+    @GetMapping("/api/v1/{username}/bookmark/{albumId}/{bookmarkId}")
     public String updateBookmarkVersion(@PathVariable("username") String username, @PathVariable("albumId") Long albumId, @PathVariable("bookmarkId") Long bookmarkId) {
         bookmarkService.syncBookmarkVersion(bookmarkId);
         return "to album detail view page";

@@ -27,7 +27,7 @@ public class HomeAlbumController {
     /*
     일주일간 생성(수정)된 앨범 중 인기 앨범 조회
      */
-    @GetMapping("/popular")
+    @GetMapping("/api/v1/popular")
     public AlbumListResult getPopularAlbums(@RequestParam(value = "cursorId", required = false) Long cursorId,
                                             @RequestParam(value = "cursorCount", required = false) Integer cursorCount) {
 
@@ -38,7 +38,7 @@ public class HomeAlbumController {
     /*
     유저의 피드 조회
      */
-    @GetMapping("/feed")
+    @GetMapping("/api/v1/feed")
     public AlbumListResult getFeedAlbums(@RequestParam(value = "cursorId", required = false) Long cursorId,
                                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                          @RequestParam(value = "cursorDateTime", required = false) LocalDateTime cursorDateTime) {

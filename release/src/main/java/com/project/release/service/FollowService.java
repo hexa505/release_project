@@ -38,9 +38,6 @@ public class FollowService {
             Follow newFollow = new Follow(user, followedUser);
             followRepository.save(newFollow);
 
-            /**
-             *  transactional 제대로 적용되는지 확인 필요
-             */
             feedService.addFeedOnFollow(user, followedUser);
         }
     }

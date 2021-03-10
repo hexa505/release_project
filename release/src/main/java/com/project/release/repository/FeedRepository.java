@@ -28,11 +28,12 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
     public List<Feed> findFeedFirstPage(@Param("userId") Long userId, Pageable page);
 
     // 피드 조회 다음 페이지
-    @Query("select f, concat(function('lpad', album.modifiedDate, 10), function('lpad', f.id, 10, '0')) as cursor from Feed f "
+    @Query("select f, concat(function('rpad', album.modifiedDate, 26, '0'), function('lpad', f.id, 10, '0')) from Feed f "
             + "join fetch f.writer writer "
             + "join fetch f.album album "
             + "where f.user.id = :userId and "
-            + "cursor < concat(function('lpad', :dateTime, 10), function('lpad', :feedId, 10, '0')) "
+            + "concat(function('rpad', album.modifiedDate, 26, '0'), function('lpad', f.id, 10, '0')) "
+            + "< concat(function('rpad', :dateTime, 26, '0'), function('lpad', :feedId, 10, '0')) "
             + "order by album.modifiedDate desc, f.id desc")
     public List<Feed> findFeedNextPage(@Param("userId") Long userId, @Param("dateTime") LocalDateTime dateTime, @Param("feedId") Long feedId, Pageable page);
 

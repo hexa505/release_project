@@ -5,7 +5,6 @@ import com.project.release.domain.AlbumListResult;
 import com.project.release.domain.album.Album;
 import com.project.release.domain.album.Photo;
 import com.project.release.domain.user.User;
-import com.project.release.repository.UserRepository;
 import com.project.release.repository.album.query.AlbumQueryDTO;
 import com.project.release.service.*;
 import lombok.RequiredArgsConstructor;
@@ -82,6 +81,20 @@ public class AlbumController {
 
         User user = userService.findByName(username);
         return albumService.getUserAlbumList(user.getId(), cursorDateTime, cursorId, PageRequest.of(0, 4));
+    }
+
+    /**
+     * 사용자의 앨범리스트 태그로 검색
+     *
+     * @author Yena Kim
+     */
+    @GetMapping("/api/v1/{username}/albums/tag/{tagId}")
+    public AlbumListResult getAlbumsWithTag(@PathVariable("username") String username, @PathVariable("tagId") Long tagId,
+                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                        @RequestParam(value = "cursorDateTime", required = false) LocalDateTime cursorDateTime) {
+
+        User user = userService.findByName(username);
+        return albumService.getUserAlbumsWithTag(user, tagId, cursorDateTime, PageRequest.of(0, 4));
     }
 
     /**

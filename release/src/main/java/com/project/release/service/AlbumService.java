@@ -5,9 +5,11 @@ import com.project.release.controller.AlbumRequestDTO;
 import com.project.release.domain.AlbumListDTO;
 import com.project.release.domain.AlbumListResult;
 import com.project.release.domain.album.Album;
+import com.project.release.domain.album.AlbumTag;
 import com.project.release.domain.user.User;
 import com.project.release.repository.album.AlbumRepository;
 import com.project.release.repository.album.AlbumRepositoryInter;
+import com.project.release.repository.album.AlbumTagRepositoryInter;
 import com.project.release.repository.album.query.AlbumQueryDTO;
 import com.project.release.repository.album.query.AlbumQueryRepository;
 import com.project.release.repository.album.query2.AlbumQueryRepository2;
@@ -38,7 +40,10 @@ import java.util.stream.Collectors;
 public class AlbumService {
     @Value("${resources.location}")
     private String resourcesLocation;
+    @Value("${resources.uri_path}")
+    private String resourcesUriPath;
     private final AlbumRepository albumRepository;
+    private final AlbumTagRepositoryInter albumTagRepositoryInter;
     private final AlbumTagService albumTagService;
     private final AlbumQueryRepository albumQueryRepository;
     private final AlbumQueryRepository2 albumQueryRepository2;
@@ -47,7 +52,7 @@ public class AlbumService {
     private final FeedService feedService;
 
     @Transactional
-    public Long createAlbum(AlbumRequestDTO form, User user) {
+    public Album createAlbum(AlbumRequestDTO form, User user) {
 
         //userName으로 유저 엔티티 찾아서 유저 인스턴스 넣는 걸로 바꿀 것
         AlbumRequestDTO.AlbumForm albumForm = form.getAlbumForm();
@@ -59,9 +64,7 @@ public class AlbumService {
         albumRepository.save(album);
         albumTagService.saveTags(album, stringToTagSet(albumForm.getTagString()));
 
-        feedService.addFeedOnAlbumCreated(user, album); // 새 앨범 피드에 추가
-
-        return album.getId();
+        return album;
     }
 
     // tags 스트링을 쪼개 주기..
@@ -124,16 +127,19 @@ public class AlbumService {
 
         saveFile(request.getAlbumForm().getPhoto(), resourcesLocation + "/" + user.getName() + "/album");
         //1. 앨범 폼 받기
-        Long albumId = createAlbum(request, user);
+        Album album = createAlbum(request, user);
         request.getPhotoFormList().forEach(photoRequest -> {
             //2. 포토 리스트 받기..
-            photoService.savePhoto(photoRequest, albumId, request.getPhotoFormList().indexOf(photoRequest));
+            photoService.savePhoto(photoRequest, album.getId(), request.getPhotoFormList().indexOf(photoRequest));
             try {
                 saveFile(photoRequest.getPhoto(), resourcesLocation + "/" + user.getName() + "/album");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
+
+        feedService.addFeedOnAlbumCreated(user, album); // 새 앨범 피드에 추가
+
     }
 
 
@@ -160,11 +166,29 @@ public class AlbumService {
         Long lastId = albums.isEmpty() ? null : albums.get(albums.size() - 1).getId();
         LocalDateTime lastDateTime = albums.isEmpty() ? null : albums.get(albums.size() - 1).getModifiedDate();
         List<AlbumListDTO> albumList = albums.stream()
-                .map(a -> new AlbumListDTO(a, a.getUser(), resourcesLocation))
+                .map(a -> new AlbumListDTO(a, a.getUser(), resourcesUriPath))
                 .collect(Collectors.toList());
 
         return new AlbumListResult<>(albumList, lastId, lastDateTime);
 
+    }
+
+    /**
+     * 유저의 특정 태그 포함하는 앨범 리스트 조회
+     *
+     * @author Yena Kim
+     */
+    public AlbumListResult<AlbumListDTO, LocalDateTime> getUserAlbumsWithTag(User user, Long tagId, LocalDateTime cursorDateTime, Pageable page) {
+        List<AlbumTag> albumTags = (cursorDateTime == null) ? albumTagRepositoryInter.findAlbumByTagFirstPage(user.getId(), tagId, page)
+                                                            : albumTagRepositoryInter.findAlbumByTagNextPage(user.getId(), tagId, cursorDateTime, page);
+
+        LocalDateTime lastDateTime = albumTags.isEmpty() ? null : albumTags.get(albumTags.size() - 1).getAlbum().getModifiedDate();
+
+        List<AlbumListDTO> albumDtoList = albumTags.stream()
+                .map(at -> new AlbumListDTO(at.getAlbum(), user, resourcesUriPath))
+                .collect(Collectors.toList());
+
+        return new AlbumListResult<>(albumDtoList, null, lastDateTime);
     }
 
     public List<Album> findAlbumsByAlbumTitle(String title) {
