@@ -29,6 +29,7 @@ public class Favorite {
     public Favorite(Album album, User user) {
         this.album = album;
         this.user = user;
+        album.getFavoriteList().add(this);
     }
 
 }

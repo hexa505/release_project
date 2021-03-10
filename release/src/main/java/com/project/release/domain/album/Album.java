@@ -42,6 +42,9 @@ public class Album extends BaseTimeEntity {
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL,  orphanRemoval = true)
     private List<Photo> photoList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Favorite> favoriteList = new ArrayList<>();
+
     @Builder
     public Album(String thumbnail, String description, String title, User user) {
         this.thumbnail = thumbnail;

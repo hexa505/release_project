@@ -4,6 +4,7 @@ import com.project.release.domain.Bookmark;
 import com.project.release.domain.Follow;
 import com.project.release.domain.album.Album;
 import com.project.release.domain.album.AlbumTag;
+import com.project.release.domain.album.Favorite;
 import com.project.release.domain.album.Tag;
 import com.project.release.domain.user.User;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +26,11 @@ public class InitDB {
     @PostConstruct
     public void init() {
         initService.userInit();
-        initService.followInit();
+        //initService.followInit();
         initService.albumInit();
         initService.albumTagInit();
         initService.bookmarkInit();
+        initService.favoriteInit();
     }
 
     @Component
@@ -53,6 +55,12 @@ public class InitDB {
                         .code((long)i)
                         .build();
                 em.persist(newUser);
+
+                Album newAlbum = Album.builder()
+                        .user(newUser)
+                        .title("album initiated")
+                        .build();
+                em.persist(newAlbum);
             }
 
         }
@@ -122,6 +130,29 @@ public class InitDB {
                 em.persist(bookmark);
             }
 
+        }
+
+        public void favoriteInit() {
+            User user = userService.findByName("myaccount");
+
+            for(int i = 1; i <=5; i++) {
+                Album album = albumService.findOneById((long)i);
+
+                Favorite favorite = Favorite.builder()
+                        .album(album)
+                        .user(user)
+                        .build();
+
+                em.persist(favorite);
+            }
+
+            User user2 = userService.findById(2L);
+            Album album2 = albumService.findOneById(3L);
+            Favorite favorite2 = Favorite.builder()
+                    .album(album2)
+                    .user(user2)
+                    .build();
+            em.persist(favorite2);
         }
 
     }

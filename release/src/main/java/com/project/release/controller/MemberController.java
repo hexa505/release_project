@@ -23,7 +23,6 @@ public class MemberController {
 
     private final HttpSession httpSession;
     private final UserService userService;
-    //private final Long testCode = 65801603L;
 
     @Value("${resources.uri_path}")
     private String resourcesUriPath;
@@ -34,7 +33,6 @@ public class MemberController {
     @GetMapping("/login/callback")
     public String checkRegistered(HttpServletResponse response, Principal principal) {
         User user = userService.findByCode(Long.parseLong(principal.getName()));
-        //User user = userService.findByCode(testCode);
 
         if(user == null) {
             return null;
@@ -48,7 +46,7 @@ public class MemberController {
     /*
     회원가입
      */
-    @PostMapping("/members")
+    @PostMapping("/api/v1/members")
     public String register(@ModelAttribute @Valid UserRequestDTO dto, Principal principal) throws IOException, ImageProcessingException, MetadataException {
 
         User user = User.builder()
@@ -70,7 +68,7 @@ public class MemberController {
     /*
     현재 사용자 조회
      */
-    @GetMapping("/members")
+    @GetMapping("/api/v1/members")
     public SimpleUserDTO getCurrentUser() {
         SessionUser requestUser = (SessionUser)httpSession.getAttribute("user");
         if(requestUser == null) return null;
@@ -82,7 +80,7 @@ public class MemberController {
     /*
     회원 조회
      */
-    @GetMapping("/members/{username}")
+    @GetMapping("/api/v1/members/{username}")
     public UserResponseDTO showUser(@PathVariable("username") String username) {
         User user = userService.findByName(username);
         return new UserResponseDTO(user, resourcesUriPath);
@@ -91,7 +89,7 @@ public class MemberController {
     /*
     회원정보 수정
      */
-    @PostMapping("/members/{username}")
+    @PostMapping("/api/v1/members/{username}")
     public void updateUser(@ModelAttribute @Valid UserRequestDTO dto, @PathVariable("username") String username) throws IOException, MetadataException, ImageProcessingException {
         SessionUser requestUser = (SessionUser)httpSession.getAttribute("user");
         if(requestUser.getName().equals(username)) {
@@ -100,8 +98,5 @@ public class MemberController {
         }
 
     }
-
-    // 회원 탈퇴 
-
 
 }

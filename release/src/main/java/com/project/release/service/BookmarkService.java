@@ -2,14 +2,13 @@ package com.project.release.service;
 
 import com.project.release.domain.Bookmark;
 import com.project.release.domain.BookmarkDTO;
-import com.project.release.domain.BookmarkListResult;
+import com.project.release.domain.AlbumListResult;
 import com.project.release.domain.album.Album;
 import com.project.release.domain.user.User;
 import com.project.release.repository.BookmarkRepository;
 import com.project.release.repository.UserRepository;
 import com.project.release.repository.album.AlbumRepositoryInter;
 import com.project.release.repository.album.AlbumTagRepository;
-import com.project.release.repository.album.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
@@ -65,7 +64,7 @@ public class BookmarkService {
     }
 
     // 북마크 리스트 조회
-    public BookmarkListResult<BookmarkDTO, LocalDateTime> getBookmarkList(Long userId, Long cursorId, LocalDateTime cursorDateTime, Pageable page) {
+    public AlbumListResult<BookmarkDTO, LocalDateTime> getBookmarkList(Long userId, Long cursorId, LocalDateTime cursorDateTime, Pageable page) {
         List<Bookmark> findBookmarks;
         if(cursorId == null) { // 첫 스크롤
             findBookmarks = bookmarkRepository.findBookmarkFirstPage(userId, page);
@@ -81,14 +80,10 @@ public class BookmarkService {
                 .map(b -> new BookmarkDTO(b, resourcesUriPath))
                 .collect(Collectors.toList());
 
-        return new BookmarkListResult<>(bookmarkList, lastId, lastDateTime);
+        return new AlbumListResult<>(bookmarkList, lastId, lastDateTime);
 
     }
 
-    /**
-     * 이거 영속성 컨텍스트에서 변경감지 일어나는지 확인 필요
-     * @param bookmarkId
-     */
     // 북마크 열람 시 앨범 버전 갱신
     @Transactional
     public void syncBookmarkVersion(Long bookmarkId) {
