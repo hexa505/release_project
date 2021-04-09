@@ -25,7 +25,7 @@ public class HomeAlbumService {
     private String resourcesUriPath;
 
     // 최근 일주일 앨범 좋아요순 조회
-    public AlbumListResult<AlbumListDTO, Integer> getPopularAlbums(LocalDateTime dateTime, Integer favCount, Long albumId, Pageable page) {
+    public AlbumListResult<AlbumListDTO, Long> getPopularAlbums(LocalDateTime dateTime, Long favCount, Long albumId, Pageable page) {
         List<Album> albums;
         if (favCount == null) {
             albums = albumRepository.findByFavoriteFirstPage(dateTime, page);
@@ -33,7 +33,7 @@ public class HomeAlbumService {
             albums = albumRepository.findByFavoriteNextPage(dateTime, favCount, albumId, page);
         }
 
-        Integer lastCount = albums.isEmpty() ? null : albums.get(albums.size() - 1).getFavoriteList().size();
+        Long lastCount = albums.isEmpty() ? null : (long)albums.get(albums.size() - 1).getFavoriteList().size();
         Long lastId = albums.isEmpty() ? null : albums.get(albums.size() - 1).getId();
 
         List<AlbumListDTO> albumList = albums.stream()

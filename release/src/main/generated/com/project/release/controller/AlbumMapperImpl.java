@@ -10,7 +10,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2021-03-10T20:00:56+0900",
+    date = "2021-04-04T20:52:59+0900",
     comments = "version: 1.4.1.Final, compiler: javac, environment: Java 14.0.1 (Oracle Corporation)"
 )
 public class AlbumMapperImpl implements AlbumMapper {

@@ -30,22 +30,23 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     public List<Album> findByUserIdNextPage(@Param("userId") Long userId, @Param("dateTime") LocalDateTime dateTime, Pageable page);
 
     // favorite 기준 앨범 리스트 조회
-    @Query("select a, count(f.id) as fc from Album a "
+    @Query("select a from Album a "
             + "join fetch a.user user "
             + "left join a.favoriteList f "
             + "where a.modifiedDate > :dateTime "
             + "group by a.id "
-            + "order by fc desc, a.id desc")
+            + "order by count(f.id) desc, a.id desc")
     public List<Album> findByFavoriteFirstPage(@Param("dateTime") LocalDateTime dateTime, Pageable page);
 
     @Query("select a from Album a "
             + "join fetch a.user user "
             + "left join a.favoriteList f "
-            + "where a.modifiedDate > :dateTime and "
-            + "(f.size < :favCount or "
-            + "f.size = :favCount and a.id < :albumId) "
-            + "order by f.size desc, a.id desc")
-    public List<Album> findByFavoriteNextPage(@Param("dateTime") LocalDateTime dateTime, @Param("favCount") Integer favCount, @Param("albumId") Long albumId, Pageable page);
+            + "where a.modifiedDate > :dateTime "
+            + "group by a.id "
+            + "having count(f.id) < :favCount "
+            + "or (count(f.id) = :favCount and a.id < :albumId) "
+            + "order by count(f.id) desc, a.id desc")
+    public List<Album> findByFavoriteNextPage(@Param("dateTime") LocalDateTime dateTime, @Param("favCount") Long favCount, @Param("albumId") Long albumId, Pageable page);
 
     public List<Album> findAlbumsByUser_Name(String name);
 

@@ -2,7 +2,7 @@ package com.project.release.service;
 
 import com.project.release.domain.album.Album;
 import com.project.release.domain.user.User;
-import com.project.release.repository.FeedRepository;
+import com.project.release.repository.TimelineRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,10 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-public class FeedServiceTest {
+public class TimelineServiceTest {
 
-    @Autowired FeedService feedService;
-    @Autowired FeedRepository feedRepository;
+    @Autowired
+    TimelineService timelineService;
+    @Autowired
+    TimelineRepository timelineRepository;
     @Autowired FollowService followService;
     @Autowired
     AlbumRepositoryInter albumRepositoryInter;
@@ -29,7 +31,7 @@ public class FeedServiceTest {
 
         followService.follow(userService.findById(3L), userService.findById(2L));
         //feedRepository.findAll().stream().forEach(f -> System.out.println(f.getUser() + " " + f.getWriter() + " " + f.getAlbum().getId()));
-        Assertions.assertThat(feedRepository.findAll().size()).isEqualTo(10);
+        Assertions.assertThat(timelineRepository.findAll().size()).isEqualTo(10);
 
     }
 
@@ -42,7 +44,7 @@ public class FeedServiceTest {
 
         followService.follow(follower, followee);
         followService.unfollow(follower, followee);
-        Assertions.assertThat(feedRepository.findAll().isEmpty()).isEqualTo(true);
+        Assertions.assertThat(timelineRepository.findAll().isEmpty()).isEqualTo(true);
     }
 
     // 유저가 앨범을 작성하면 해당 앨범을 팔로워의 피드에 넣어야함
@@ -55,10 +57,10 @@ public class FeedServiceTest {
                 .title("my account album")
                 .build();
         albumRepositoryInter.save(album);
-        feedService.addFeedOnAlbumCreated(user, album);
+        timelineService.addTimelineOnAlbumCreated(user, album);
 
         //feedRepository.findAll().stream().forEach(f -> System.out.println(f.getUser().getName() + " " + f.getWriter().getName() + " " + f.getAlbum().getId()));
-        Assertions.assertThat(feedRepository.findAll().size()).isEqualTo(9);
+        Assertions.assertThat(timelineRepository.findAll().size()).isEqualTo(9);
 
     }
 
@@ -72,10 +74,10 @@ public class FeedServiceTest {
                 .title("my account album")
                 .build();
         albumRepositoryInter.save(album);
-        feedService.addFeedOnAlbumCreated(user, album);
-        feedService.deleteFeedOnAlbumDeleted(album.getId());
+        timelineService.addTimelineOnAlbumCreated(user, album);
+        timelineService.deleteTimelineOnAlbumDeleted(album.getId());
 
-        Assertions.assertThat(feedRepository.findAll().isEmpty()).isEqualTo(true);
+        Assertions.assertThat(timelineRepository.findAll().isEmpty()).isEqualTo(true);
 
     }
 

@@ -26,10 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -47,7 +44,7 @@ public class AlbumService {
     private final  PhotoService photoService; // 이거 나중에 어케 처리하기.............
     private final ApplicationEventPublisher eventPublisher;
 
-    private final FeedService feedService;
+    private final TimelineService timelineService;
 
     @Transactional
     public Album createAlbum(AlbumRequestDTO form, User user) {
@@ -114,7 +111,7 @@ public class AlbumService {
             }
         });
 
-        feedService.addFeedOnAlbumCreated(user, album); // 새 앨범 피드에 추가
+        timelineService.addTimelineOnAlbumCreated(user, album); // 새 앨범 피드에 추가
 
     }
 
@@ -180,7 +177,7 @@ public class AlbumService {
     public void deleteAlbum(Long albumId) {
         // TODO: 삭제할 대상이 없는 경우 처리
         albumRepository.findById(albumId).get();
-        feedService.deleteFeedOnAlbumDeleted(albumId); // 피드에서 앨범 삭제
+        timelineService.deleteTimelineOnAlbumDeleted(albumId); // 피드에서 앨범 삭제
         albumRepository.deleteAlbumById(albumId);
     }
 

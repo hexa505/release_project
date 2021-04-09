@@ -10,8 +10,7 @@ public class ReleaseApplication {
 
 	private static final String PROPERTIES =
 			"spring.config.location="
-					+"classpath:/application.yml"
-					+",classpath:/security.yml";
+					+"classpath:/application.yml";
 
 	public static void main(String[] args) {
 		SpringApplication.run(ReleaseApplication.class, args);

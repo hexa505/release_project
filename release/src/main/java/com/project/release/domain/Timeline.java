@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor
-public class Feed {
+public class Timeline {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +31,7 @@ public class Feed {
     private Album album;
 
     @Builder
-    public Feed(User user, User writer, Album album) {
+    public Timeline(User user, User writer, Album album) {
         this.user = user;
         this.writer = writer;
         this.album = album;
